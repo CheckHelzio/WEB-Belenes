@@ -1,0 +1,1554 @@
+<app-toolbar>
+  <paper-icon-button icon="menu" onclick="drawer.toggle()"></paper-icon-button>
+  <paper-icon-button icon="menu" style="visibility: hidden"></paper-icon-button>
+  <div main-title>{{title}}</div>
+  <paper-icon-button icon="search" onclick="dialogBuscar.open()"></paper-icon-button>
+  <paper-icon-button icon="event" (click)="irAFecha(); dialogIrFecha.open()"></paper-icon-button>
+</app-toolbar>
+
+<div style="display: inline-flex" id="conte_sub_header">
+  <paper-icon-button icon="chevron-left" (click)="mesPosterior();" style="color: white; margin-left: 8px"></paper-icon-button>
+  <div class="centrado" style="width: 100%">{{calendarioActualizarDiasMes | date:'MMMM' | capitalize}} del
+    {{calendarioActualizarDiasMes | date:'y'}}
+  </div>
+  <paper-icon-button icon="chevron-right" (click)="mesAnterior();" style="color: white; margin-right: 10px"></paper-icon-button>
+</div>
+
+<div class="container flex" id="conte_nombre_dias">
+  <div class="flexchild centrado"
+       [style.color]="(irHoyNumeroDiaSemana === 1 && calendarioActualizarDiasMes.getMonth() === calendarioIrHoy.getMonth()) ?  '#0099cc' : '#757575'">
+    lunes
+  </div>
+  <div class="flexchild centrado"
+       [style.color]="(irHoyNumeroDiaSemana === 2 && calendarioActualizarDiasMes.getMonth() === calendarioIrHoy.getMonth()) ?  '#0099cc' : '#757575'">
+    martes
+  </div>
+  <div class="flexchild centrado"
+       [style.color]="(irHoyNumeroDiaSemana === 3 && calendarioActualizarDiasMes.getMonth() === calendarioIrHoy.getMonth())?  '#0099cc' : '#757575'">
+    miércoles
+  </div>
+  <div class="flexchild centrado"
+       [style.color]="(irHoyNumeroDiaSemana === 4 && calendarioActualizarDiasMes.getMonth() === calendarioIrHoy.getMonth()) ?  '#0099cc' : '#757575'">
+    jueves
+  </div>
+  <div class="flexchild centrado"
+       [style.color]="(irHoyNumeroDiaSemana === 5 && calendarioActualizarDiasMes.getMonth() === calendarioIrHoy.getMonth()) ?  '#0099cc' : '#757575'">
+    viernes
+  </div>
+  <div class="flexchild centrado"
+       [style.color]="(irHoyNumeroDiaSemana === 6 && calendarioActualizarDiasMes.getMonth() === calendarioIrHoy.getMonth()) ?  '#0099cc' : '#757575'">
+    sábado
+  </div>
+  <div class="flexchild centrado"
+       [style.color]="(irHoyNumeroDiaSemana === 0 && calendarioActualizarDiasMes.getMonth() === calendarioIrHoy.getMonth()) ?  '#0099cc' : '#757575'">
+    domingo
+  </div>
+</div>
+
+<paper-drawer-divider></paper-drawer-divider>
+
+<div id="conte_botones" [@visibilityChanged]="isVisible">
+
+  <div class="container flex" [ngClass]="sexta_semana ? 'semana2' : 'semana'">
+
+    <paper-button class="flexchild " [ngClass]="sexta_semana ? 'semana2' : 'semana'" raised
+                  (click)=" clickbotones(2); diasemana <= 1 ? listaEventos.open() : ''">
+      <div *ngIf="diasemana === 1">
+        <div [ngClass]="sexta_semana ? 'num_dia2' : 'num_dia'"><strong [ngClass]="(calendarioActualizarDiasMes.getMonth() === irHoyMes && irHoyNumeroDiaMes === 31 - diasemana) ? 'hoy' : ''" [ngClass]="(calendarioActualizarDiasMes.getMonth() === irHoyMes && irHoyNumeroDiaMes === 31 - diasemana) ? 'hoy' : ''">{{2 - diasemana}}</strong></div>
+        <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+             *ngIf="eventosDelMes && eventosDelMes[0] && eventosDelMes[0].eventos.length > 0">
+          <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+               [style.background]="(eventosDelMes && eventosDelMes[0] && eventosDelMes[0].eventos[0]) ? eventosDelMes[0].eventos[0].fondo : ''">
+            <strong>{{eventosDelMes && eventosDelMes[0] && eventosDelMes[0].eventos[0] ?
+              eventosDelMes[0].eventos[0].titulo : ''}}</strong>
+          </div>
+        </div>
+        <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+             *ngIf="eventosDelMes && eventosDelMes[0] && eventosDelMes[0].eventos.length > 1">
+          <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+               [style.background]="(eventosDelMes && eventosDelMes[0] && eventosDelMes[0].eventos[1]) ? eventosDelMes[0].eventos[1].fondo : ''">
+            <strong>{{eventosDelMes && eventosDelMes[0] && eventosDelMes[0].eventos[1] ?
+              eventosDelMes[0].eventos[1].titulo : ''}}</strong>
+          </div>
+        </div>
+        <div [ngClass]="sexta_semana ? 'eventos_tam2 mas2' : 'eventos_tam1 mas'"><strong>{{eventosDelMes &&
+          eventosDelMes[0] &&
+          eventosDelMes[0].eventos.length > 2 ?
+          (eventosDelMes[0].eventos.length - 2) + ' más': ''}}</strong></div>
+      </div>
+    </paper-button>
+
+    <paper-button class="flexchild " [ngClass]="sexta_semana ? 'semana2' : 'semana'" raised
+                  (click)=" clickbotones(3); diasemana <= 2 ? listaEventos.open() : ''">
+      <div *ngIf="diasemana <= 2">
+        <div [ngClass]="sexta_semana ? 'num_dia2' : 'num_dia'"><strong [ngClass]="(calendarioActualizarDiasMes.getMonth() === irHoyMes && irHoyNumeroDiaMes === 3 - diasemana) ? 'hoy' : ''">{{3 - diasemana}}</strong></div>
+        <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+             *ngIf="eventosDelMes && eventosDelMes[1] && eventosDelMes[1].eventos.length > 0">
+          <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+               [style.background]="(eventosDelMes && eventosDelMes[1] && eventosDelMes[1].eventos[0]) ? eventosDelMes[1].eventos[0].fondo : ''">
+            <strong>{{eventosDelMes && eventosDelMes[1] && eventosDelMes[1].eventos[0] ?
+              eventosDelMes[1].eventos[0].titulo : ''}}</strong>
+          </div>
+        </div>
+        <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+             *ngIf="eventosDelMes && eventosDelMes[1] && eventosDelMes[1].eventos.length > 1">
+          <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+               [style.background]="(eventosDelMes && eventosDelMes[1] && eventosDelMes[1].eventos[1]) ? eventosDelMes[1].eventos[1].fondo : ''">
+            <strong>{{eventosDelMes && eventosDelMes[1] && eventosDelMes[1].eventos[1] ?
+              eventosDelMes[1].eventos[1].titulo : ''}}</strong>
+          </div>
+        </div>
+        <div [ngClass]="sexta_semana ? 'eventos_tam2 mas2' : 'eventos_tam1 mas'"><strong>{{eventosDelMes &&
+          eventosDelMes[1] &&
+          eventosDelMes[1].eventos.length > 2 ?
+          (eventosDelMes[1].eventos.length - 2) + ' más': ''}}</strong></div>
+      </div>
+    </paper-button>
+
+    <paper-button class="flexchild " [ngClass]="sexta_semana ? 'semana2' : 'semana'" raised
+                  (click)=" clickbotones(4); diasemana <= 3 ? listaEventos.open() : ''">
+      <div *ngIf="diasemana <= 3">
+        <div [ngClass]="sexta_semana ? 'num_dia2' : 'num_dia'"><strong [ngClass]="(calendarioActualizarDiasMes.getMonth() === irHoyMes && irHoyNumeroDiaMes === 4 - diasemana) ? 'hoy' : ''">{{4 - diasemana}}</strong></div>
+        <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+             *ngIf="eventosDelMes && eventosDelMes[2] && eventosDelMes[2].eventos.length > 0">
+          <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+               [style.background]="(eventosDelMes && eventosDelMes[2] && eventosDelMes[2].eventos[0]) ? eventosDelMes[2].eventos[0].fondo : ''">
+            <strong>{{eventosDelMes && eventosDelMes[2] && eventosDelMes[2].eventos[0] ?
+              eventosDelMes[2].eventos[0].titulo : ''}}</strong>
+          </div>
+        </div>
+        <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+             *ngIf="eventosDelMes && eventosDelMes[2] && eventosDelMes[2].eventos.length > 1">
+          <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+               [style.background]="(eventosDelMes && eventosDelMes[2] && eventosDelMes[2].eventos[1]) ? eventosDelMes[2].eventos[1].fondo : ''">
+            <strong>{{eventosDelMes && eventosDelMes[2] && eventosDelMes[2].eventos[1] ?
+              eventosDelMes[2].eventos[1].titulo : ''}}</strong>
+          </div>
+        </div>
+        <div [ngClass]="sexta_semana ? 'eventos_tam2 mas2' : 'eventos_tam1 mas'"><strong>{{eventosDelMes &&
+          eventosDelMes[2] &&
+          eventosDelMes[2].eventos.length > 2 ?
+          (eventosDelMes[2].eventos.length - 2) + ' más': ''}}</strong></div>
+      </div>
+    </paper-button>
+
+    <paper-button class="flexchild " [ngClass]="sexta_semana ? 'semana2' : 'semana'" raised
+                  (click)=" clickbotones(5); diasemana <= 4 ? listaEventos.open() : ''">
+      <div *ngIf="diasemana <= 4">
+        <div [ngClass]="sexta_semana ? 'num_dia2' : 'num_dia'"><strong [ngClass]="(calendarioActualizarDiasMes.getMonth() === irHoyMes && irHoyNumeroDiaMes === 5 - diasemana) ? 'hoy' : ''">{{5 - diasemana}}</strong></div>
+        <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+             *ngIf="eventosDelMes && eventosDelMes[3] && eventosDelMes[3].eventos.length > 0">
+          <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+               [style.background]="(eventosDelMes && eventosDelMes[3] && eventosDelMes[3].eventos[0]) ? eventosDelMes[3].eventos[0].fondo : ''">
+            <strong>{{eventosDelMes && eventosDelMes[3] && eventosDelMes[3].eventos[0] ?
+              eventosDelMes[3].eventos[0].titulo : ''}}</strong>
+          </div>
+        </div>
+        <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+             *ngIf="eventosDelMes && eventosDelMes[3] && eventosDelMes[3].eventos.length > 1">
+          <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+               [style.background]="(eventosDelMes && eventosDelMes[3] && eventosDelMes[3].eventos[1]) ? eventosDelMes[3].eventos[1].fondo : ''">
+            <strong>{{eventosDelMes && eventosDelMes[3] && eventosDelMes[3].eventos[1] ?
+              eventosDelMes[3].eventos[1].titulo : ''}}</strong>
+          </div>
+        </div>
+        <div [ngClass]="sexta_semana ? 'eventos_tam2 mas2' : 'eventos_tam1 mas'"><strong>{{eventosDelMes &&
+          eventosDelMes[3] &&
+          eventosDelMes[3].eventos.length > 2 ?
+          (eventosDelMes[3].eventos.length - 2) + ' más': ''}}</strong></div>
+      </div>
+    </paper-button>
+
+    <paper-button class="flexchild " [ngClass]="sexta_semana ? 'semana2' : 'semana'" raised
+                  (click)=" clickbotones(6); diasemana <= 5 ? listaEventos.open() : ''">
+      <div *ngIf="diasemana <= 5">
+        <div [ngClass]="sexta_semana ? 'num_dia2' : 'num_dia'"><strong [ngClass]="(calendarioActualizarDiasMes.getMonth() === irHoyMes && irHoyNumeroDiaMes === 6 - diasemana) ? 'hoy' : ''">{{6 - diasemana}}</strong></div>
+        <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+             *ngIf="eventosDelMes && eventosDelMes[4] && eventosDelMes[4].eventos.length > 0">
+          <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+               [style.background]="(eventosDelMes && eventosDelMes[4] && eventosDelMes[4].eventos[0]) ? eventosDelMes[4].eventos[0].fondo : ''">
+            <strong>{{eventosDelMes && eventosDelMes[4] && eventosDelMes[4].eventos[0] ?
+              eventosDelMes[4].eventos[0].titulo : ''}}</strong>
+          </div>
+        </div>
+        <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+             *ngIf="eventosDelMes && eventosDelMes[4] && eventosDelMes[4].eventos.length > 1">
+          <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+               [style.background]="(eventosDelMes && eventosDelMes[4] && eventosDelMes[4].eventos[1]) ? eventosDelMes[4].eventos[1].fondo : ''">
+            <strong>{{eventosDelMes && eventosDelMes[4] && eventosDelMes[4].eventos[1] ?
+              eventosDelMes[4].eventos[1].titulo : ''}}</strong>
+          </div>
+        </div>
+        <div [ngClass]="sexta_semana ? 'eventos_tam2 mas2' : 'eventos_tam1 mas'"><strong>{{eventosDelMes &&
+          eventosDelMes[4] &&
+          eventosDelMes[4].eventos.length > 2 ?
+          (eventosDelMes[4].eventos.length - 2) + ' más': ''}}</strong></div>
+      </div>
+    </paper-button>
+
+    <paper-button class="flexchild " [ngClass]="sexta_semana ? 'semana2' : 'semana'" raised
+                  (click)=" clickbotones(7); diasemana <= 6 ? listaEventos.open() : ''">
+      <div *ngIf="diasemana <= 6">
+        <div [ngClass]="sexta_semana ? 'num_dia2' : 'num_dia'"><strong [ngClass]="(calendarioActualizarDiasMes.getMonth() === irHoyMes && irHoyNumeroDiaMes === 7 - diasemana) ? 'hoy' : ''">{{7 - diasemana}}</strong></div>
+        <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+             *ngIf="eventosDelMes && eventosDelMes[5] && eventosDelMes[5].eventos.length > 0">
+          <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+               [style.background]="(eventosDelMes && eventosDelMes[5] && eventosDelMes[5].eventos[0]) ? eventosDelMes[5].eventos[0].fondo : ''">
+            <strong>{{eventosDelMes && eventosDelMes[5] && eventosDelMes[5].eventos[0] ?
+              eventosDelMes[5].eventos[0].titulo : ''}}</strong>
+          </div>
+        </div>
+        <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+             *ngIf="eventosDelMes && eventosDelMes[5] && eventosDelMes[5].eventos.length > 1">
+          <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+               [style.background]="(eventosDelMes && eventosDelMes[5] && eventosDelMes[5].eventos[1]) ? eventosDelMes[5].eventos[1].fondo : ''">
+            <strong>{{eventosDelMes && eventosDelMes[5] && eventosDelMes[5].eventos[1] ?
+              eventosDelMes[5].eventos[1].titulo : ''}}</strong>
+          </div>
+        </div>
+        <div [ngClass]="sexta_semana ? 'eventos_tam2 mas2' : 'eventos_tam1 mas'"><strong>{{eventosDelMes &&
+          eventosDelMes[5] &&
+          eventosDelMes[5].eventos.length > 2 ?
+          (eventosDelMes[5].eventos.length - 2) + ' más': ''}}</strong></div>
+      </div>
+    </paper-button>
+
+    <paper-button class="flexchild " [ngClass]="sexta_semana ? 'semana2' : 'semana'" raised
+                  (click)=" clickbotones(8); diasemana <= 7 ? listaEventos.open() : ''">
+      <div *ngIf="diasemana <= 7">
+        <div [ngClass]="sexta_semana ? 'num_dia2' : 'num_dia'"><strong [ngClass]="(calendarioActualizarDiasMes.getMonth() === irHoyMes && irHoyNumeroDiaMes === 8 - diasemana) ? 'hoy' : ''">{{8 - diasemana}}</strong></div>
+        <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+             *ngIf="eventosDelMes && eventosDelMes[6] && eventosDelMes[6].eventos.length > 0">
+          <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+               [style.background]="(eventosDelMes && eventosDelMes[6] && eventosDelMes[6].eventos[0]) ? eventosDelMes[6].eventos[0].fondo : ''">
+            <strong>{{eventosDelMes && eventosDelMes[6] && eventosDelMes[6].eventos[0] ?
+              eventosDelMes[6].eventos[0].titulo : ''}}</strong>
+          </div>
+        </div>
+        <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+             *ngIf="eventosDelMes && eventosDelMes[6] && eventosDelMes[6].eventos.length > 1">
+          <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+               [style.background]="(eventosDelMes && eventosDelMes[6] && eventosDelMes[6].eventos[1]) ? eventosDelMes[6].eventos[1].fondo : ''">
+            <strong>{{eventosDelMes && eventosDelMes[6] && eventosDelMes[6].eventos[1] ?
+              eventosDelMes[6].eventos[1].titulo : ''}}</strong>
+          </div>
+        </div>
+        <div [ngClass]="sexta_semana ? 'eventos_tam2 mas2' : 'eventos_tam1 mas'"><strong>{{eventosDelMes &&
+          eventosDelMes[6] &&
+          eventosDelMes[6].eventos.length > 2 ?
+          (eventosDelMes[6].eventos.length - 2) + ' más': ''}}</strong></div>
+      </div>
+    </paper-button>
+
+  </div>
+
+  <paper-drawer-divider></paper-drawer-divider>
+
+  <div class="container flex " [ngClass]="sexta_semana ? 'semana2' : 'semana'">
+
+    <paper-button class="flexchild " [ngClass]="sexta_semana ? 'semana2' : 'semana'" raised
+                  (click)=" clickbotones(9); diamax >= 9 ? listaEventos.open() : ''">
+      <div [ngClass]="sexta_semana ? 'num_dia2' : 'num_dia'"><strong [ngClass]="(calendarioActualizarDiasMes.getMonth() === irHoyMes && irHoyNumeroDiaMes === 9 - diasemana) ? 'hoy' : ''">{{9 - diasemana}}</strong></div>
+      <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+           *ngIf="eventosDelMes && eventosDelMes[7] && eventosDelMes[7].eventos.length > 0">
+        <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+             [style.background]="(eventosDelMes && eventosDelMes[7] && eventosDelMes[7].eventos[0]) ? eventosDelMes[7].eventos[0].fondo : ''">
+          <strong>{{eventosDelMes && eventosDelMes[7] && eventosDelMes[7].eventos[0] ?
+            eventosDelMes[7].eventos[0].titulo : ''}}</strong>
+        </div>
+      </div>
+      <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+           *ngIf="eventosDelMes && eventosDelMes[7] && eventosDelMes[7].eventos.length > 1">
+        <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+             [style.background]="(eventosDelMes && eventosDelMes[7] && eventosDelMes[7].eventos[1]) ? eventosDelMes[7].eventos[1].fondo : ''">
+          <strong>{{eventosDelMes && eventosDelMes[7] && eventosDelMes[7].eventos[1] ?
+            eventosDelMes[7].eventos[1].titulo : ''}}</strong>
+        </div>
+      </div>
+      <div [ngClass]="sexta_semana ? 'eventos_tam2 mas2' : 'eventos_tam1 mas'"><strong>{{eventosDelMes &&
+        eventosDelMes[7] &&
+        eventosDelMes[7].eventos.length > 2 ?
+        (eventosDelMes[7].eventos.length - 2) + ' más': ''}}</strong></div>
+    </paper-button>
+
+    <paper-button class="flexchild " [ngClass]="sexta_semana ? 'semana2' : 'semana'" raised
+                  (click)=" clickbotones(10); diamax >= 10 ? listaEventos.open() : ''">
+      <div [ngClass]="sexta_semana ? 'num_dia2' : 'num_dia'"><strong [ngClass]="(calendarioActualizarDiasMes.getMonth() === irHoyMes && irHoyNumeroDiaMes === 10 - diasemana) ? 'hoy' : ''">{{10 - diasemana}}</strong></div>
+      <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+           *ngIf="eventosDelMes && eventosDelMes[8] && eventosDelMes[8].eventos.length > 0">
+        <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+             [style.background]="(eventosDelMes && eventosDelMes[8] && eventosDelMes[8].eventos[0]) ? eventosDelMes[8].eventos[0].fondo : ''">
+          <strong>{{eventosDelMes && eventosDelMes[8] && eventosDelMes[8].eventos[0] ?
+            eventosDelMes[8].eventos[0].titulo : ''}}</strong>
+        </div>
+      </div>
+      <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+           *ngIf="eventosDelMes && eventosDelMes[8] && eventosDelMes[8].eventos.length > 1">
+        <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+             [style.background]="(eventosDelMes && eventosDelMes[8] && eventosDelMes[8].eventos[1]) ? eventosDelMes[8].eventos[1].fondo : ''">
+          <strong>{{eventosDelMes && eventosDelMes[8] && eventosDelMes[8].eventos[1] ?
+            eventosDelMes[8].eventos[1].titulo : ''}}</strong>
+        </div>
+      </div>
+      <div [ngClass]="sexta_semana ? 'eventos_tam2 mas2' : 'eventos_tam1 mas'"><strong>{{eventosDelMes &&
+        eventosDelMes[8] &&
+        eventosDelMes[8].eventos.length > 2 ?
+        (eventosDelMes[8].eventos.length - 2) + ' más': ''}}</strong></div>
+    </paper-button>
+
+    <paper-button class="flexchild " [ngClass]="sexta_semana ? 'semana2' : 'semana'" raised
+                  (click)=" clickbotones(11); diamax >= 11 ? listaEventos.open() : ''">
+      <div [ngClass]="sexta_semana ? 'num_dia2' : 'num_dia'"><strong [ngClass]="(calendarioActualizarDiasMes.getMonth() === irHoyMes && irHoyNumeroDiaMes === 11 - diasemana) ? 'hoy' : ''">{{11 - diasemana}}</strong></div>
+      <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+           *ngIf="eventosDelMes && eventosDelMes[9] && eventosDelMes[9].eventos.length > 0">
+        <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+             [style.background]="(eventosDelMes && eventosDelMes[9] && eventosDelMes[9].eventos[0]) ? eventosDelMes[9].eventos[0].fondo : ''">
+          <strong>{{eventosDelMes && eventosDelMes[9] && eventosDelMes[9].eventos[0] ?
+            eventosDelMes[9].eventos[0].titulo : ''}}</strong>
+        </div>
+      </div>
+      <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+           *ngIf="eventosDelMes && eventosDelMes[9] && eventosDelMes[9].eventos.length > 1">
+        <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+             [style.background]="(eventosDelMes && eventosDelMes[9] && eventosDelMes[9].eventos[1]) ? eventosDelMes[9].eventos[1].fondo : ''">
+          <strong>{{eventosDelMes && eventosDelMes[9] && eventosDelMes[9].eventos[1] ?
+            eventosDelMes[9].eventos[1].titulo : ''}}</strong>
+        </div>
+      </div>
+      <div [ngClass]="sexta_semana ? 'eventos_tam2 mas2' : 'eventos_tam1 mas'"><strong>{{eventosDelMes &&
+        eventosDelMes[9] &&
+        eventosDelMes[9].eventos.length > 2 ?
+        (eventosDelMes[9].eventos.length - 2) + ' más': ''}}</strong></div>
+    </paper-button>
+
+    <paper-button class="flexchild " [ngClass]="sexta_semana ? 'semana2' : 'semana'" raised
+                  (click)=" clickbotones(12); diamax >= 12 ? listaEventos.open() : ''">
+      <div [ngClass]="sexta_semana ? 'num_dia2' : 'num_dia'"><strong [ngClass]="(calendarioActualizarDiasMes.getMonth() === irHoyMes && irHoyNumeroDiaMes === 12 - diasemana) ? 'hoy' : ''">{{12 - diasemana}}</strong></div>
+      <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+           *ngIf="eventosDelMes && eventosDelMes[10] && eventosDelMes[10].eventos.length > 0">
+        <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+             [style.background]="(eventosDelMes && eventosDelMes[10] && eventosDelMes[10].eventos[0]) ? eventosDelMes[10].eventos[0].fondo : ''">
+          <strong>{{eventosDelMes && eventosDelMes[10] && eventosDelMes[10].eventos[0] ?
+            eventosDelMes[10].eventos[0].titulo : ''}}</strong>
+        </div>
+      </div>
+      <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+           *ngIf="eventosDelMes && eventosDelMes[10] && eventosDelMes[10].eventos.length > 1">
+        <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+             [style.background]="(eventosDelMes && eventosDelMes[10] && eventosDelMes[10].eventos[1]) ? eventosDelMes[10].eventos[1].fondo : ''">
+          <strong>{{eventosDelMes && eventosDelMes[10] && eventosDelMes[10].eventos[1] ?
+            eventosDelMes[10].eventos[1].titulo : ''}}</strong>
+        </div>
+      </div>
+      <div [ngClass]="sexta_semana ? 'eventos_tam2 mas2' : 'eventos_tam1 mas'"><strong>{{eventosDelMes &&
+        eventosDelMes[10] &&
+        eventosDelMes[10].eventos.length > 2 ?
+        (eventosDelMes[10].eventos.length - 2) + ' más': ''}}</strong></div>
+    </paper-button>
+
+    <paper-button class="flexchild " [ngClass]="sexta_semana ? 'semana2' : 'semana'" raised
+                  (click)=" clickbotones(13); diamax >= 13 ? listaEventos.open() : ''">
+      <div [ngClass]="sexta_semana ? 'num_dia2' : 'num_dia'"><strong [ngClass]="(calendarioActualizarDiasMes.getMonth() === irHoyMes && irHoyNumeroDiaMes === 13 - diasemana) ? 'hoy' : ''">{{13 - diasemana}}</strong></div>
+      <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+           *ngIf="eventosDelMes && eventosDelMes[11] && eventosDelMes[11].eventos.length > 0">
+        <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+             [style.background]="(eventosDelMes && eventosDelMes[11] && eventosDelMes[11].eventos[0]) ? eventosDelMes[11].eventos[0].fondo : ''">
+          <strong>{{eventosDelMes && eventosDelMes[11] && eventosDelMes[11].eventos[0] ?
+            eventosDelMes[11].eventos[0].titulo : ''}}</strong>
+        </div>
+      </div>
+      <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+           *ngIf="eventosDelMes && eventosDelMes[11] && eventosDelMes[11].eventos.length > 1">
+        <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+             [style.background]="(eventosDelMes && eventosDelMes[11] && eventosDelMes[11].eventos[1]) ? eventosDelMes[11].eventos[1].fondo : ''">
+          <strong>{{eventosDelMes && eventosDelMes[11] && eventosDelMes[11].eventos[1] ?
+            eventosDelMes[11].eventos[1].titulo : ''}}</strong>
+        </div>
+      </div>
+      <div [ngClass]="sexta_semana ? 'eventos_tam2 mas2' : 'eventos_tam1 mas'"><strong>{{eventosDelMes &&
+        eventosDelMes[11] &&
+        eventosDelMes[11].eventos.length > 2 ?
+        (eventosDelMes[11].eventos.length - 2) + ' más': ''}}</strong></div>
+    </paper-button>
+
+    <paper-button class="flexchild " [ngClass]="sexta_semana ? 'semana2' : 'semana'" raised
+                  (click)=" clickbotones(14); diamax >= 14 ? listaEventos.open() : ''">
+      <div [ngClass]="sexta_semana ? 'num_dia2' : 'num_dia'"><strong [ngClass]="(calendarioActualizarDiasMes.getMonth() === irHoyMes && irHoyNumeroDiaMes === 14 - diasemana) ? 'hoy' : ''">{{14 - diasemana}}</strong></div>
+      <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+           *ngIf="eventosDelMes && eventosDelMes[12] && eventosDelMes[12].eventos.length > 0">
+        <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+             [style.background]="(eventosDelMes && eventosDelMes[12] && eventosDelMes[12].eventos[0]) ? eventosDelMes[12].eventos[0].fondo : ''">
+          <strong>{{eventosDelMes && eventosDelMes[12] && eventosDelMes[12].eventos[0] ?
+            eventosDelMes[12].eventos[0].titulo : ''}}</strong>
+        </div>
+      </div>
+      <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+           *ngIf="eventosDelMes && eventosDelMes[12] && eventosDelMes[12].eventos.length > 1">
+        <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+             [style.background]="(eventosDelMes && eventosDelMes[12] && eventosDelMes[12].eventos[1]) ? eventosDelMes[12].eventos[1].fondo : ''">
+          <strong>{{eventosDelMes && eventosDelMes[12] && eventosDelMes[12].eventos[1] ?
+            eventosDelMes[12].eventos[1].titulo : ''}}</strong>
+        </div>
+      </div>
+      <div [ngClass]="sexta_semana ? 'eventos_tam2 mas2' : 'eventos_tam1 mas'"><strong>{{eventosDelMes &&
+        eventosDelMes[12] &&
+        eventosDelMes[12].eventos.length > 2 ?
+        (eventosDelMes[12].eventos.length - 2) + ' más': ''}}</strong></div>
+    </paper-button>
+
+    <paper-button class="flexchild " [ngClass]="sexta_semana ? 'semana2' : 'semana'" raised
+                  (click)=" clickbotones(15); diamax >= 15 ? listaEventos.open() : ''">
+      <div [ngClass]="sexta_semana ? 'num_dia2' : 'num_dia'"><strong [ngClass]="(calendarioActualizarDiasMes.getMonth() === irHoyMes && irHoyNumeroDiaMes === 15 - diasemana) ? 'hoy' : ''">{{15 - diasemana}}</strong></div>
+      <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+           *ngIf="eventosDelMes && eventosDelMes[13] && eventosDelMes[13].eventos.length > 0">
+        <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+             [style.background]="(eventosDelMes && eventosDelMes[13] && eventosDelMes[13].eventos[0]) ? eventosDelMes[13].eventos[0].fondo : ''">
+          <strong>{{eventosDelMes && eventosDelMes[13] && eventosDelMes[13].eventos[0] ?
+            eventosDelMes[13].eventos[0].titulo : ''}}</strong>
+        </div>
+      </div>
+      <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+           *ngIf="eventosDelMes && eventosDelMes[13] && eventosDelMes[13].eventos.length > 1">
+        <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+             [style.background]="(eventosDelMes && eventosDelMes[13] && eventosDelMes[13].eventos[1]) ? eventosDelMes[13].eventos[1].fondo : ''">
+          <strong>{{eventosDelMes && eventosDelMes[13] && eventosDelMes[13].eventos[1] ?
+            eventosDelMes[13].eventos[1].titulo : ''}}</strong>
+        </div>
+      </div>
+      <div [ngClass]="sexta_semana ? 'eventos_tam2 mas2' : 'eventos_tam1 mas'"><strong>{{eventosDelMes &&
+        eventosDelMes[13] &&
+        eventosDelMes[13].eventos.length > 2 ?
+        (eventosDelMes[13].eventos.length - 2) + ' más': ''}}</strong></div>
+    </paper-button>
+
+  </div>
+
+  <paper-drawer-divider></paper-drawer-divider>
+
+  <div class="container flex " [ngClass]="sexta_semana ? 'semana2' : 'semana'">
+
+    <paper-button class="flexchild " [ngClass]="sexta_semana ? 'semana2' : 'semana'" raised
+                  (click)=" clickbotones(16); diamax >= 16 ? listaEventos.open() : ''">
+      <div [ngClass]="sexta_semana ? 'num_dia2' : 'num_dia'"><strong [ngClass]="(calendarioActualizarDiasMes.getMonth() === irHoyMes && irHoyNumeroDiaMes === 16 - diasemana) ? 'hoy' : ''">{{16 - diasemana}}</strong></div>
+      <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+           *ngIf="eventosDelMes && eventosDelMes[14] && eventosDelMes[14].eventos.length > 0">
+        <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+             [style.background]="(eventosDelMes && eventosDelMes[14] && eventosDelMes[14].eventos[0]) ? eventosDelMes[14].eventos[0].fondo : ''">
+          <strong>{{eventosDelMes && eventosDelMes[14] && eventosDelMes[14].eventos[0] ?
+            eventosDelMes[14].eventos[0].titulo : ''}}</strong>
+        </div>
+      </div>
+      <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+           *ngIf="eventosDelMes && eventosDelMes[14] && eventosDelMes[14].eventos.length > 1">
+        <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+             [style.background]="(eventosDelMes && eventosDelMes[14] && eventosDelMes[14].eventos[1]) ? eventosDelMes[14].eventos[1].fondo : ''">
+          <strong>{{eventosDelMes && eventosDelMes[14] && eventosDelMes[14].eventos[1] ?
+            eventosDelMes[14].eventos[1].titulo : ''}}</strong>
+        </div>
+      </div>
+      <div [ngClass]="sexta_semana ? 'eventos_tam2 mas2' : 'eventos_tam1 mas'"><strong>{{eventosDelMes &&
+        eventosDelMes[14] &&
+        eventosDelMes[14].eventos.length > 2 ?
+        (eventosDelMes[14].eventos.length - 2) + ' más': ''}}</strong></div>
+    </paper-button>
+
+    <paper-button class="flexchild " [ngClass]="sexta_semana ? 'semana2' : 'semana'" raised
+                  (click)=" clickbotones(17); diamax >= 17 ? listaEventos.open() : ''">
+      <div [ngClass]="sexta_semana ? 'num_dia2' : 'num_dia'"><strong [ngClass]="(calendarioActualizarDiasMes.getMonth() === irHoyMes && irHoyNumeroDiaMes === 17 - diasemana) ? 'hoy' : ''">{{17 - diasemana}}</strong></div>
+      <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+           *ngIf="eventosDelMes && eventosDelMes[15] && eventosDelMes[15].eventos.length > 0">
+        <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+             [style.background]="(eventosDelMes && eventosDelMes[15] && eventosDelMes[15].eventos[0]) ? eventosDelMes[15].eventos[0].fondo : ''">
+          <strong>{{eventosDelMes && eventosDelMes[15] && eventosDelMes[15].eventos[0] ?
+            eventosDelMes[15].eventos[0].titulo : ''}}</strong>
+        </div>
+      </div>
+      <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+           *ngIf="eventosDelMes && eventosDelMes[15] && eventosDelMes[15].eventos.length > 1">
+        <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+             [style.background]="(eventosDelMes && eventosDelMes[15] && eventosDelMes[15].eventos[1]) ? eventosDelMes[15].eventos[1].fondo : ''">
+          <strong>{{eventosDelMes && eventosDelMes[15] && eventosDelMes[15].eventos[1] ?
+            eventosDelMes[15].eventos[1].titulo : ''}}</strong>
+        </div>
+      </div>
+      <div [ngClass]="sexta_semana ? 'eventos_tam2 mas2' : 'eventos_tam1 mas'"><strong>{{eventosDelMes &&
+        eventosDelMes[15] &&
+        eventosDelMes[15].eventos.length > 2 ?
+        (eventosDelMes[15].eventos.length - 2) + ' más': ''}}</strong></div>
+    </paper-button>
+
+    <paper-button class="flexchild " [ngClass]="sexta_semana ? 'semana2' : 'semana'" raised
+                  (click)=" clickbotones(18); diamax >= 18 ? listaEventos.open() : ''">
+      <div [ngClass]="sexta_semana ? 'num_dia2' : 'num_dia'"><strong [ngClass]="(calendarioActualizarDiasMes.getMonth() === irHoyMes && irHoyNumeroDiaMes === 18 - diasemana) ? 'hoy' : ''">{{18 - diasemana}}</strong></div>
+      <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+           *ngIf="eventosDelMes && eventosDelMes[16] && eventosDelMes[16].eventos.length > 0">
+        <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+             [style.background]="(eventosDelMes && eventosDelMes[16] && eventosDelMes[16].eventos[0]) ? eventosDelMes[16].eventos[0].fondo : ''">
+          <strong>{{eventosDelMes && eventosDelMes[16] && eventosDelMes[16].eventos[0] ?
+            eventosDelMes[16].eventos[0].titulo : ''}}</strong>
+        </div>
+      </div>
+      <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+           *ngIf="eventosDelMes && eventosDelMes[16] && eventosDelMes[16].eventos.length > 1">
+        <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+             [style.background]="(eventosDelMes && eventosDelMes[16] && eventosDelMes[16].eventos[1]) ? eventosDelMes[16].eventos[1].fondo : ''">
+          <strong>{{eventosDelMes && eventosDelMes[16] && eventosDelMes[16].eventos[1] ?
+            eventosDelMes[16].eventos[1].titulo : ''}}</strong>
+        </div>
+      </div>
+      <div [ngClass]="sexta_semana ? 'eventos_tam2 mas2' : 'eventos_tam1 mas'"><strong>{{eventosDelMes &&
+        eventosDelMes[16] &&
+        eventosDelMes[16].eventos.length > 2 ?
+        (eventosDelMes[16].eventos.length - 2) + ' más': ''}}</strong></div>
+    </paper-button>
+
+    <paper-button class="flexchild " [ngClass]="sexta_semana ? 'semana2' : 'semana'" raised
+                  (click)=" clickbotones(19); diamax >= 19 ? listaEventos.open() : ''">
+      <div [ngClass]="sexta_semana ? 'num_dia2' : 'num_dia'"><strong [ngClass]="(calendarioActualizarDiasMes.getMonth() === irHoyMes && irHoyNumeroDiaMes === 19 - diasemana) ? 'hoy' : ''">{{19 - diasemana}}</strong></div>
+      <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+           *ngIf="eventosDelMes && eventosDelMes[17] && eventosDelMes[17].eventos.length > 0">
+        <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+             [style.background]="(eventosDelMes && eventosDelMes[17] && eventosDelMes[17].eventos[0]) ? eventosDelMes[17].eventos[0].fondo : ''">
+          <strong>{{eventosDelMes && eventosDelMes[17] && eventosDelMes[17].eventos[0] ?
+            eventosDelMes[17].eventos[0].titulo : ''}}</strong>
+        </div>
+      </div>
+      <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+           *ngIf="eventosDelMes && eventosDelMes[17] && eventosDelMes[17].eventos.length > 1">
+        <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+             [style.background]="(eventosDelMes && eventosDelMes[17] && eventosDelMes[17].eventos[1]) ? eventosDelMes[17].eventos[1].fondo : ''">
+          <strong>{{eventosDelMes && eventosDelMes[17] && eventosDelMes[17].eventos[1] ?
+            eventosDelMes[17].eventos[1].titulo : ''}}</strong>
+        </div>
+      </div>
+      <div [ngClass]="sexta_semana ? 'eventos_tam2 mas2' : 'eventos_tam1 mas'"><strong>{{eventosDelMes &&
+        eventosDelMes[17] &&
+        eventosDelMes[17].eventos.length > 2 ?
+        (eventosDelMes[17].eventos.length - 2) + ' más': ''}}</strong></div>
+    </paper-button>
+
+    <paper-button class="flexchild " [ngClass]="sexta_semana ? 'semana2' : 'semana'" raised
+                  (click)=" clickbotones(20); diamax >= 20 ? listaEventos.open() : ''">
+      <div [ngClass]="sexta_semana ? 'num_dia2' : 'num_dia'"><strong [ngClass]="(calendarioActualizarDiasMes.getMonth() === irHoyMes && irHoyNumeroDiaMes === 20 - diasemana) ? 'hoy' : ''">{{20 - diasemana}}</strong></div>
+      <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+           *ngIf="eventosDelMes && eventosDelMes[18] && eventosDelMes[18].eventos.length > 0">
+        <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+             [style.background]="(eventosDelMes && eventosDelMes[18] && eventosDelMes[18].eventos[0]) ? eventosDelMes[18].eventos[0].fondo : ''">
+          <strong>{{eventosDelMes && eventosDelMes[18] && eventosDelMes[18].eventos[0] ?
+            eventosDelMes[18].eventos[0].titulo : ''}}</strong>
+        </div>
+      </div>
+      <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+           *ngIf="eventosDelMes && eventosDelMes[18] && eventosDelMes[18].eventos.length > 1">
+        <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+             [style.background]="(eventosDelMes && eventosDelMes[18] && eventosDelMes[18].eventos[1]) ? eventosDelMes[18].eventos[1].fondo : ''">
+          <strong>{{eventosDelMes && eventosDelMes[18] && eventosDelMes[18].eventos[1] ?
+            eventosDelMes[18].eventos[1].titulo : ''}}</strong>
+        </div>
+      </div>
+      <div [ngClass]="sexta_semana ? 'eventos_tam2 mas2' : 'eventos_tam1 mas'"><strong>{{eventosDelMes &&
+        eventosDelMes[18] &&
+        eventosDelMes[18].eventos.length > 2 ?
+        (eventosDelMes[18].eventos.length - 2) + ' más': ''}}</strong></div>
+    </paper-button>
+
+    <paper-button class="flexchild " [ngClass]="sexta_semana ? 'semana2' : 'semana'" raised
+                  (click)=" clickbotones(21); diamax >= 21 ? listaEventos.open() : ''">
+      <div [ngClass]="sexta_semana ? 'num_dia2' : 'num_dia'"><strong [ngClass]="(calendarioActualizarDiasMes.getMonth() === irHoyMes && irHoyNumeroDiaMes === 21 - diasemana) ? 'hoy' : ''">{{21 - diasemana}}</strong></div>
+      <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+           *ngIf="eventosDelMes && eventosDelMes[19] && eventosDelMes[19].eventos.length > 0">
+        <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+             [style.background]="(eventosDelMes && eventosDelMes[19] && eventosDelMes[19].eventos[0]) ? eventosDelMes[19].eventos[0].fondo : ''">
+          <strong>{{eventosDelMes && eventosDelMes[19] && eventosDelMes[19].eventos[0] ?
+            eventosDelMes[19].eventos[0].titulo : ''}}</strong>
+        </div>
+      </div>
+      <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+           *ngIf="eventosDelMes && eventosDelMes[19] && eventosDelMes[19].eventos.length > 1">
+        <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+             [style.background]="(eventosDelMes && eventosDelMes[19] && eventosDelMes[19].eventos[1]) ? eventosDelMes[19].eventos[1].fondo : ''">
+          <strong>{{eventosDelMes && eventosDelMes[19] && eventosDelMes[19].eventos[1] ?
+            eventosDelMes[19].eventos[1].titulo : ''}}</strong>
+        </div>
+      </div>
+      <div [ngClass]="sexta_semana ? 'eventos_tam2 mas2' : 'eventos_tam1 mas'"><strong>{{eventosDelMes &&
+        eventosDelMes[19] &&
+        eventosDelMes[19].eventos.length > 2 ?
+        (eventosDelMes[19].eventos.length - 2) + ' más': ''}}</strong></div>
+    </paper-button>
+
+    <paper-button class="flexchild " [ngClass]="sexta_semana ? 'semana2' : 'semana'" raised
+                  (click)=" clickbotones(22); diamax >= 22 ? listaEventos.open() : ''">
+      <div [ngClass]="sexta_semana ? 'num_dia2' : 'num_dia'"><strong [ngClass]="(calendarioActualizarDiasMes.getMonth() === irHoyMes && irHoyNumeroDiaMes === 22 - diasemana) ? 'hoy' : ''">{{22 - diasemana}}</strong></div>
+      <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+           *ngIf="eventosDelMes && eventosDelMes[20] && eventosDelMes[20].eventos.length > 0">
+        <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+             [style.background]="(eventosDelMes && eventosDelMes[20] && eventosDelMes[20].eventos[0]) ? eventosDelMes[20].eventos[0].fondo : ''">
+          <strong>{{eventosDelMes && eventosDelMes[20] && eventosDelMes[20].eventos[0] ?
+            eventosDelMes[20].eventos[0].titulo : ''}}</strong>
+        </div>
+      </div>
+      <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+           *ngIf="eventosDelMes && eventosDelMes[20] && eventosDelMes[20].eventos.length > 1">
+        <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+             [style.background]="(eventosDelMes && eventosDelMes[20] && eventosDelMes[20].eventos[1]) ? eventosDelMes[20].eventos[1].fondo : ''">
+          <strong>{{eventosDelMes && eventosDelMes[20] && eventosDelMes[20].eventos[1] ?
+            eventosDelMes[20].eventos[1].titulo : ''}}</strong>
+        </div>
+      </div>
+      <div [ngClass]="sexta_semana ? 'eventos_tam2 mas2' : 'eventos_tam1 mas'"><strong>{{eventosDelMes &&
+        eventosDelMes[20] &&
+        eventosDelMes[20].eventos.length > 2 ?
+        (eventosDelMes[20].eventos.length - 2) + ' más': ''}}</strong></div>
+    </paper-button>
+
+  </div>
+
+  <paper-drawer-divider></paper-drawer-divider>
+
+  <div class="container flex " [ngClass]="sexta_semana ? 'semana2' : 'semana'">
+
+    <paper-button class="flexchild " [ngClass]="sexta_semana ? 'semana2' : 'semana'" raised
+                  (click)=" clickbotones(23); diamax >= 23 ? listaEventos.open() : ''">
+      <div [ngClass]="sexta_semana ? 'num_dia2' : 'num_dia'"><strong [ngClass]="(calendarioActualizarDiasMes.getMonth() === irHoyMes && irHoyNumeroDiaMes === 23 - diasemana) ? 'hoy' : ''">{{23 - diasemana}}</strong></div>
+      <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+           *ngIf="eventosDelMes && eventosDelMes[21] && eventosDelMes[21].eventos.length > 0">
+        <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+             [style.background]="(eventosDelMes && eventosDelMes[21] && eventosDelMes[21].eventos[0]) ? eventosDelMes[21].eventos[0].fondo : ''">
+          <strong>{{eventosDelMes && eventosDelMes[21] && eventosDelMes[21].eventos[0] ?
+            eventosDelMes[21].eventos[0].titulo : ''}}</strong>
+        </div>
+      </div>
+      <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+           *ngIf="eventosDelMes && eventosDelMes[21] && eventosDelMes[21].eventos.length > 1">
+        <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+             [style.background]="(eventosDelMes && eventosDelMes[21] && eventosDelMes[21].eventos[1]) ? eventosDelMes[21].eventos[1].fondo : ''">
+          <strong>{{eventosDelMes && eventosDelMes[21] && eventosDelMes[21].eventos[1] ?
+            eventosDelMes[21].eventos[1].titulo : ''}}</strong>
+        </div>
+      </div>
+      <div [ngClass]="sexta_semana ? 'eventos_tam2 mas2' : 'eventos_tam1 mas'"><strong>{{eventosDelMes &&
+        eventosDelMes[21] &&
+        eventosDelMes[21].eventos.length > 2 ?
+        (eventosDelMes[21].eventos.length - 2) + ' más': ''}}</strong></div>
+    </paper-button>
+
+    <paper-button class="flexchild " [ngClass]="sexta_semana ? 'semana2' : 'semana'" raised
+                  (click)=" clickbotones(24); diamax >= 24 ? listaEventos.open() : ''">
+      <div [ngClass]="sexta_semana ? 'num_dia2' : 'num_dia'"><strong [ngClass]="(calendarioActualizarDiasMes.getMonth() === irHoyMes && irHoyNumeroDiaMes === 24 - diasemana) ? 'hoy' : ''">{{24 - diasemana}}</strong></div>
+      <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+           *ngIf="eventosDelMes && eventosDelMes[22] && eventosDelMes[22].eventos.length > 0">
+        <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+             [style.background]="(eventosDelMes && eventosDelMes[22] && eventosDelMes[22].eventos[0]) ? eventosDelMes[22].eventos[0].fondo : ''">
+          <strong>{{eventosDelMes && eventosDelMes[22] && eventosDelMes[22].eventos[0] ?
+            eventosDelMes[22].eventos[0].titulo : ''}}</strong>
+        </div>
+      </div>
+      <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+           *ngIf="eventosDelMes && eventosDelMes[22] && eventosDelMes[22].eventos.length > 1">
+        <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+             [style.background]="(eventosDelMes && eventosDelMes[22] && eventosDelMes[22].eventos[1]) ? eventosDelMes[22].eventos[1].fondo : ''">
+          <strong>{{eventosDelMes && eventosDelMes[22] && eventosDelMes[22].eventos[1] ?
+            eventosDelMes[22].eventos[1].titulo : ''}}</strong>
+        </div>
+      </div>
+      <div [ngClass]="sexta_semana ? 'eventos_tam2 mas2' : 'eventos_tam1 mas'"><strong>{{eventosDelMes &&
+        eventosDelMes[22] &&
+        eventosDelMes[22].eventos.length > 2 ?
+        (eventosDelMes[22].eventos.length - 2) + ' más': ''}}</strong></div>
+    </paper-button>
+
+    <paper-button class="flexchild " [ngClass]="sexta_semana ? 'semana2' : 'semana'" raised
+                  (click)=" clickbotones(25); diamax >= 25 ? listaEventos.open() : ''">
+      <div [ngClass]="sexta_semana ? 'num_dia2' : 'num_dia'"><strong [ngClass]="(calendarioActualizarDiasMes.getMonth() === irHoyMes && irHoyNumeroDiaMes === 25 - diasemana) ? 'hoy' : ''">{{25 - diasemana}}</strong></div>
+      <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+           *ngIf="eventosDelMes && eventosDelMes[23] && eventosDelMes[23].eventos.length > 0">
+        <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+             [style.background]="(eventosDelMes && eventosDelMes[23] && eventosDelMes[23].eventos[0]) ? eventosDelMes[23].eventos[0].fondo : ''">
+          <strong>{{eventosDelMes && eventosDelMes[23] && eventosDelMes[23].eventos[0] ?
+            eventosDelMes[23].eventos[0].titulo : ''}}</strong>
+        </div>
+      </div>
+      <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+           *ngIf="eventosDelMes && eventosDelMes[23] && eventosDelMes[23].eventos.length > 1">
+        <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+             [style.background]="(eventosDelMes && eventosDelMes[23] && eventosDelMes[23].eventos[1]) ? eventosDelMes[23].eventos[1].fondo : ''">
+          <strong>{{eventosDelMes && eventosDelMes[23] && eventosDelMes[23].eventos[1] ?
+            eventosDelMes[23].eventos[1].titulo : ''}}</strong>
+        </div>
+      </div>
+      <div [ngClass]="sexta_semana ? 'eventos_tam2 mas2' : 'eventos_tam1 mas'"><strong>{{eventosDelMes &&
+        eventosDelMes[23] &&
+        eventosDelMes[23].eventos.length > 2 ?
+        (eventosDelMes[23].eventos.length - 2) + ' más': ''}}</strong></div>
+    </paper-button>
+
+    <paper-button class="flexchild " [ngClass]="sexta_semana ? 'semana2' : 'semana'" raised
+                  (click)=" clickbotones(26); diamax >= 26 ? listaEventos.open() : ''">
+      <div [ngClass]="sexta_semana ? 'num_dia2' : 'num_dia'"><strong [ngClass]="(calendarioActualizarDiasMes.getMonth() === irHoyMes && irHoyNumeroDiaMes === 26 - diasemana) ? 'hoy' : ''">{{26 - diasemana}}</strong></div>
+      <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+           *ngIf="eventosDelMes && eventosDelMes[24] && eventosDelMes[24].eventos.length > 0">
+        <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+             [style.background]="(eventosDelMes && eventosDelMes[24] && eventosDelMes[24].eventos[0]) ? eventosDelMes[24].eventos[0].fondo : ''">
+          <strong>{{eventosDelMes && eventosDelMes[24] && eventosDelMes[24].eventos[0] ?
+            eventosDelMes[24].eventos[0].titulo : ''}}</strong>
+        </div>
+      </div>
+      <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+           *ngIf="eventosDelMes && eventosDelMes[24] && eventosDelMes[24].eventos.length > 1">
+        <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+             [style.background]="(eventosDelMes && eventosDelMes[24] && eventosDelMes[24].eventos[1]) ? eventosDelMes[24].eventos[1].fondo : ''">
+          <strong>{{eventosDelMes && eventosDelMes[24] && eventosDelMes[24].eventos[1] ?
+            eventosDelMes[24].eventos[1].titulo : ''}}</strong>
+        </div>
+      </div>
+      <div [ngClass]="sexta_semana ? 'eventos_tam2 mas2' : 'eventos_tam1 mas'"><strong>{{eventosDelMes &&
+        eventosDelMes[24] &&
+        eventosDelMes[24].eventos.length > 2 ?
+        (eventosDelMes[24].eventos.length - 2) + ' más': ''}}</strong></div>
+    </paper-button>
+
+    <paper-button class="flexchild " [ngClass]="sexta_semana ? 'semana2' : 'semana'" raised
+                  (click)=" clickbotones(27); diamax >= 27 ? listaEventos.open() : ''">
+      <div [ngClass]="sexta_semana ? 'num_dia2' : 'num_dia'"><strong [ngClass]="(calendarioActualizarDiasMes.getMonth() === irHoyMes && irHoyNumeroDiaMes === 27 - diasemana) ? 'hoy' : ''">{{27 - diasemana}}</strong></div>
+      <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+           *ngIf="eventosDelMes && eventosDelMes[25] && eventosDelMes[25].eventos.length > 0">
+        <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+             [style.background]="(eventosDelMes && eventosDelMes[25] && eventosDelMes[25].eventos[0]) ? eventosDelMes[25].eventos[0].fondo : ''">
+          <strong>{{eventosDelMes && eventosDelMes[25] && eventosDelMes[25].eventos[0] ?
+            eventosDelMes[25].eventos[0].titulo : ''}}</strong>
+        </div>
+      </div>
+      <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+           *ngIf="eventosDelMes && eventosDelMes[25] && eventosDelMes[25].eventos.length > 1">
+        <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+             [style.background]="(eventosDelMes && eventosDelMes[25] && eventosDelMes[25].eventos[1]) ? eventosDelMes[25].eventos[1].fondo : ''">
+          <strong>{{eventosDelMes && eventosDelMes[25] && eventosDelMes[25].eventos[1] ?
+            eventosDelMes[25].eventos[1].titulo : ''}}</strong>
+        </div>
+      </div>
+      <div [ngClass]="sexta_semana ? 'eventos_tam2 mas2' : 'eventos_tam1 mas'"><strong>{{eventosDelMes &&
+        eventosDelMes[25] &&
+        eventosDelMes[25].eventos.length > 2 ?
+        (eventosDelMes[25].eventos.length - 2) + ' más': ''}}</strong></div>
+    </paper-button>
+
+    <paper-button class="flexchild " [ngClass]="sexta_semana ? 'semana2' : 'semana'" raised
+                  (click)=" clickbotones(28); diamax >= 28 ? listaEventos.open() : ''">
+      <div [ngClass]="sexta_semana ? 'num_dia2' : 'num_dia'"><strong [ngClass]="(calendarioActualizarDiasMes.getMonth() === irHoyMes && irHoyNumeroDiaMes === 28 - diasemana) ? 'hoy' : ''">{{28 - diasemana}}</strong></div>
+      <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+           *ngIf="eventosDelMes && eventosDelMes[26] && eventosDelMes[26].eventos.length > 0">
+        <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+             [style.background]="(eventosDelMes && eventosDelMes[26] && eventosDelMes[26].eventos[0]) ? eventosDelMes[26].eventos[0].fondo : ''">
+          <strong>{{eventosDelMes && eventosDelMes[26] && eventosDelMes[26].eventos[0] ?
+            eventosDelMes[26].eventos[0].titulo : ''}}</strong>
+        </div>
+      </div>
+      <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+           *ngIf="eventosDelMes && eventosDelMes[26] && eventosDelMes[26].eventos.length > 1">
+        <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+             [style.background]="(eventosDelMes && eventosDelMes[26] && eventosDelMes[26].eventos[1]) ? eventosDelMes[26].eventos[1].fondo : ''">
+          <strong>{{eventosDelMes && eventosDelMes[26] && eventosDelMes[26].eventos[1] ?
+            eventosDelMes[26].eventos[1].titulo : ''}}</strong>
+        </div>
+      </div>
+      <div [ngClass]="sexta_semana ? 'eventos_tam2 mas2' : 'eventos_tam1 mas'"><strong>{{eventosDelMes &&
+        eventosDelMes[26] &&
+        eventosDelMes[26].eventos.length > 2 ?
+        (eventosDelMes[26].eventos.length - 2) + ' más': ''}}</strong></div>
+    </paper-button>
+
+    <paper-button class="flexchild " [ngClass]="sexta_semana ? 'semana2' : 'semana'" raised
+                  (click)=" clickbotones(29); diamax >= 29 ? listaEventos.open() : ''">
+      <div [ngClass]="sexta_semana ? 'num_dia2' : 'num_dia'"><strong [ngClass]="(calendarioActualizarDiasMes.getMonth() === irHoyMes && irHoyNumeroDiaMes === 29 - diasemana) ? 'hoy' : ''">{{29 - diasemana}}</strong></div>
+      <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+           *ngIf="eventosDelMes && eventosDelMes[27] && eventosDelMes[27].eventos.length > 0">
+        <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+             [style.background]="(eventosDelMes && eventosDelMes[27] && eventosDelMes[27].eventos[0]) ? eventosDelMes[27].eventos[0].fondo : ''">
+          <strong>{{eventosDelMes && eventosDelMes[27] && eventosDelMes[27].eventos[0] ?
+            eventosDelMes[27].eventos[0].titulo : ''}}</strong>
+        </div>
+      </div>
+      <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+           *ngIf="eventosDelMes && eventosDelMes[27] && eventosDelMes[27].eventos.length > 1">
+        <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+             [style.background]="(eventosDelMes && eventosDelMes[27] && eventosDelMes[27].eventos[1]) ? eventosDelMes[27].eventos[1].fondo : ''">
+          <strong>{{eventosDelMes && eventosDelMes[27] && eventosDelMes[27].eventos[1] ?
+            eventosDelMes[27].eventos[1].titulo : ''}}</strong>
+        </div>
+      </div>
+      <div [ngClass]="sexta_semana ? 'eventos_tam2 mas2' : 'eventos_tam1 mas'"><strong>{{eventosDelMes &&
+        eventosDelMes[27] &&
+        eventosDelMes[27].eventos.length > 2 ?
+        (eventosDelMes[27].eventos.length - 2) + ' más': ''}}</strong></div>
+    </paper-button>
+
+  </div>
+
+  <paper-drawer-divider></paper-drawer-divider>
+
+  <div class="container flex " [ngClass]="sexta_semana ? 'semana2' : 'semana'">
+
+    <paper-button class="flexchild " [ngClass]="sexta_semana ? 'semana2' : 'semana'" raised
+                  (click)=" clickbotones(30); diamax >= 30 ? listaEventos.open() : ''">
+      <div *ngIf="diamax >= 30">
+        <div [ngClass]="sexta_semana ? 'num_dia2' : 'num_dia'"><strong [ngClass]="(calendarioActualizarDiasMes.getMonth() === irHoyMes && irHoyNumeroDiaMes === 30 - diasemana) ? 'hoy' : ''">{{30 - diasemana}}</strong></div>
+        <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+             *ngIf="eventosDelMes && eventosDelMes[28] && eventosDelMes[28].eventos.length > 0">
+          <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+               [style.background]="(eventosDelMes && eventosDelMes[28] && eventosDelMes[28].eventos[0]) ? eventosDelMes[28].eventos[0].fondo : ''">
+            <strong>{{eventosDelMes && eventosDelMes[28] && eventosDelMes[28].eventos[0] ?
+              eventosDelMes[28].eventos[0].titulo : ''}}</strong>
+          </div>
+        </div>
+        <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+             *ngIf="eventosDelMes && eventosDelMes[28] && eventosDelMes[28].eventos.length > 1">
+          <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+               [style.background]="(eventosDelMes && eventosDelMes[28] && eventosDelMes[28].eventos[1]) ? eventosDelMes[28].eventos[1].fondo : ''">
+            <strong>{{eventosDelMes && eventosDelMes[28] && eventosDelMes[28].eventos[1] ?
+              eventosDelMes[28].eventos[1].titulo : ''}}</strong>
+          </div>
+        </div>
+        <div [ngClass]="sexta_semana ? 'eventos_tam2 mas2' : 'eventos_tam1 mas'"><strong>{{eventosDelMes &&
+          eventosDelMes[28] &&
+          eventosDelMes[28].eventos.length > 2 ?
+          (eventosDelMes[28].eventos.length - 2) + ' más': ''}}</strong></div>
+      </div>
+    </paper-button>
+
+    <paper-button class="flexchild " [ngClass]="sexta_semana ? 'semana2' : 'semana'" raised
+                  (click)=" clickbotones(31); diamax >= 31 ? listaEventos.open() : ''">
+      <div *ngIf="diamax >= 31">
+        <div [ngClass]="sexta_semana ? 'num_dia2' : 'num_dia'"><strong [ngClass]="(calendarioActualizarDiasMes.getMonth() === irHoyMes && irHoyNumeroDiaMes === 31 - diasemana) ? 'hoy' : ''">{{31 - diasemana}}</strong></div>
+        <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+             *ngIf="eventosDelMes && eventosDelMes[29] && eventosDelMes[29].eventos.length > 0">
+          <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+               [style.background]="(eventosDelMes && eventosDelMes[29] && eventosDelMes[29].eventos[0]) ? eventosDelMes[29].eventos[0].fondo : ''">
+            <strong>{{eventosDelMes && eventosDelMes[29] && eventosDelMes[29].eventos[0] ?
+              eventosDelMes[29].eventos[0].titulo : ''}}</strong>
+          </div>
+        </div>
+        <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+             *ngIf="eventosDelMes && eventosDelMes[29] && eventosDelMes[29].eventos.length > 1">
+          <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+               [style.background]="(eventosDelMes && eventosDelMes[29] && eventosDelMes[29].eventos[1]) ? eventosDelMes[29].eventos[1].fondo : ''">
+            <strong>{{eventosDelMes && eventosDelMes[29] && eventosDelMes[29].eventos[1] ?
+              eventosDelMes[29].eventos[1].titulo : ''}}</strong>
+          </div>
+        </div>
+        <div [ngClass]="sexta_semana ? 'eventos_tam2 mas2' : 'eventos_tam1 mas'"><strong>{{eventosDelMes &&
+          eventosDelMes[29] &&
+          eventosDelMes[29].eventos.length > 2 ?
+          (eventosDelMes[29].eventos.length - 2) + ' más': ''}}</strong></div>
+      </div>
+    </paper-button>
+
+    <paper-button class="flexchild " [ngClass]="sexta_semana ? 'semana2' : 'semana'" raised
+                  (click)=" clickbotones(32); diamax >= 32 ? listaEventos.open() : ''">
+      <div *ngIf="diamax >= 32">
+        <div [ngClass]="sexta_semana ? 'num_dia2' : 'num_dia'"><strong [ngClass]="(calendarioActualizarDiasMes.getMonth() === irHoyMes && irHoyNumeroDiaMes === 32 - diasemana) ? 'hoy' : ''">{{32 - diasemana}}</strong></div>
+        <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+             *ngIf="eventosDelMes && eventosDelMes[30] && eventosDelMes[30].eventos.length > 0">
+          <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+               [style.background]="(eventosDelMes && eventosDelMes[30] && eventosDelMes[30].eventos[0]) ? eventosDelMes[30].eventos[0].fondo : ''">
+            <strong>{{eventosDelMes && eventosDelMes[30] && eventosDelMes[30].eventos[0] ?
+              eventosDelMes[30].eventos[0].titulo : ''}}</strong>
+          </div>
+        </div>
+        <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+             *ngIf="eventosDelMes && eventosDelMes[30] && eventosDelMes[30].eventos.length > 1">
+          <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+               [style.background]="(eventosDelMes && eventosDelMes[30] && eventosDelMes[30].eventos[1]) ? eventosDelMes[30].eventos[1].fondo : ''">
+            <strong>{{eventosDelMes && eventosDelMes[30] && eventosDelMes[30].eventos[1] ?
+              eventosDelMes[30].eventos[1].titulo : ''}}</strong>
+          </div>
+        </div>
+        <div [ngClass]="sexta_semana ? 'eventos_tam2 mas2' : 'eventos_tam1 mas'"><strong>{{eventosDelMes &&
+          eventosDelMes[30] &&
+          eventosDelMes[30].eventos.length > 2 ?
+          (eventosDelMes[30].eventos.length - 2) + ' más': ''}}</strong></div>
+      </div>
+    </paper-button>
+
+    <paper-button class="flexchild " [ngClass]="sexta_semana ? 'semana2' : 'semana'" raised
+                  (click)=" clickbotones(33); diamax >= 33 ? listaEventos.open() : ''">
+      <div *ngIf="diamax >= 33">
+        <div [ngClass]="sexta_semana ? 'num_dia2' : 'num_dia'"><strong [ngClass]="(calendarioActualizarDiasMes.getMonth() === irHoyMes && irHoyNumeroDiaMes === 33 - diasemana) ? 'hoy' : ''">{{33 - diasemana}}</strong></div>
+        <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+             *ngIf="eventosDelMes && eventosDelMes[31] && eventosDelMes[31].eventos.length > 0">
+          <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+               [style.background]="(eventosDelMes && eventosDelMes[31] && eventosDelMes[31].eventos[0]) ? eventosDelMes[31].eventos[0].fondo : ''">
+            <strong>{{eventosDelMes && eventosDelMes[31] && eventosDelMes[31].eventos[0] ?
+              eventosDelMes[31].eventos[0].titulo : ''}}</strong>
+          </div>
+        </div>
+        <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+             *ngIf="eventosDelMes && eventosDelMes[31] && eventosDelMes[31].eventos.length > 1">
+          <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+               [style.background]="(eventosDelMes && eventosDelMes[31] && eventosDelMes[31].eventos[1]) ? eventosDelMes[31].eventos[1].fondo : ''">
+            <strong>{{eventosDelMes && eventosDelMes[31] && eventosDelMes[31].eventos[1] ?
+              eventosDelMes[31].eventos[1].titulo : ''}}</strong>
+          </div>
+        </div>
+        <div [ngClass]="sexta_semana ? 'eventos_tam2 mas2' : 'eventos_tam1 mas'"><strong>{{eventosDelMes &&
+          eventosDelMes[31] &&
+          eventosDelMes[31].eventos.length > 2 ?
+          (eventosDelMes[31].eventos.length - 2) + ' más': ''}}</strong></div>
+      </div>
+    </paper-button>
+
+    <paper-button class="flexchild " [ngClass]="sexta_semana ? 'semana2' : 'semana'" raised
+                  (click)=" clickbotones(34); diamax >= 34 ? listaEventos.open() : ''">
+      <div *ngIf="diamax >= 34">
+        <div [ngClass]="sexta_semana ? 'num_dia2' : 'num_dia'"><strong [ngClass]="(calendarioActualizarDiasMes.getMonth() === irHoyMes && irHoyNumeroDiaMes === 34 - diasemana) ? 'hoy' : ''">{{34 - diasemana}}</strong></div>
+        <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+             *ngIf="eventosDelMes && eventosDelMes[32] && eventosDelMes[32].eventos.length > 0">
+          <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+               [style.background]="(eventosDelMes && eventosDelMes[32] && eventosDelMes[32].eventos[0]) ? eventosDelMes[32].eventos[0].fondo : ''">
+            <strong>{{eventosDelMes && eventosDelMes[32] && eventosDelMes[32].eventos[0] ?
+              eventosDelMes[32].eventos[0].titulo : ''}}</strong>
+          </div>
+        </div>
+        <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+             *ngIf="eventosDelMes && eventosDelMes[32] && eventosDelMes[32].eventos.length > 1">
+          <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+               [style.background]="(eventosDelMes && eventosDelMes[32] && eventosDelMes[32].eventos[1]) ? eventosDelMes[32].eventos[1].fondo : ''">
+            <strong>{{eventosDelMes && eventosDelMes[32] && eventosDelMes[32].eventos[1] ?
+              eventosDelMes[32].eventos[1].titulo : ''}}</strong>
+          </div>
+        </div>
+        <div [ngClass]="sexta_semana ? 'eventos_tam2 mas2' : 'eventos_tam1 mas'"><strong>{{eventosDelMes &&
+          eventosDelMes[32] &&
+          eventosDelMes[32].eventos.length > 2 ?
+          (eventosDelMes[32].eventos.length - 2) + ' más': ''}}</strong></div>
+      </div>
+    </paper-button>
+
+    <paper-button class="flexchild " [ngClass]="sexta_semana ? 'semana2' : 'semana'" raised
+                  (click)=" clickbotones(35); diamax >= 35 ? listaEventos.open() : ''">
+      <div *ngIf="diamax >= 35">
+        <div [ngClass]="sexta_semana ? 'num_dia2' : 'num_dia'"><strong [ngClass]="(calendarioActualizarDiasMes.getMonth() === irHoyMes && irHoyNumeroDiaMes === 35 - diasemana) ? 'hoy' : ''">{{35 - diasemana}}</strong></div>
+        <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+             *ngIf="eventosDelMes && eventosDelMes[33] && eventosDelMes[33].eventos.length > 0">
+          <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+               [style.background]="(eventosDelMes && eventosDelMes[33] && eventosDelMes[33].eventos[0]) ? eventosDelMes[33].eventos[0].fondo : ''">
+            <strong>{{eventosDelMes && eventosDelMes[33] && eventosDelMes[33].eventos[0] ?
+              eventosDelMes[33].eventos[0].titulo : ''}}</strong>
+          </div>
+        </div>
+        <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+             *ngIf="eventosDelMes && eventosDelMes[33] && eventosDelMes[33].eventos.length > 1">
+          <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+               [style.background]="(eventosDelMes && eventosDelMes[33] && eventosDelMes[33].eventos[1]) ? eventosDelMes[33].eventos[1].fondo : ''">
+            <strong>{{eventosDelMes && eventosDelMes[33] && eventosDelMes[33].eventos[1] ?
+              eventosDelMes[33].eventos[1].titulo : ''}}</strong>
+          </div>
+        </div>
+        <div [ngClass]="sexta_semana ? 'eventos_tam2 mas2' : 'eventos_tam1 mas'"><strong>{{eventosDelMes &&
+          eventosDelMes[33] &&
+          eventosDelMes[33].eventos.length > 2 ?
+          (eventosDelMes[33].eventos.length - 2) + ' más': ''}}</strong></div>
+      </div>
+    </paper-button>
+
+    <paper-button class="flexchild " [ngClass]="sexta_semana ? 'semana2' : 'semana'" raised
+                  (click)=" clickbotones(36); diamax >= 36 ? listaEventos.open() : ''">
+      <div *ngIf="diamax >= 36">
+        <div [ngClass]="sexta_semana ? 'num_dia2' : 'num_dia'"><strong [ngClass]="(calendarioActualizarDiasMes.getMonth() === irHoyMes && irHoyNumeroDiaMes === 36 - diasemana) ? 'hoy' : ''">{{36 - diasemana}}</strong></div>
+        <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+             *ngIf="eventosDelMes && eventosDelMes[34] && eventosDelMes[34].eventos.length > 0">
+          <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+               [style.background]="(eventosDelMes && eventosDelMes[34] && eventosDelMes[34].eventos[0]) ? eventosDelMes[34].eventos[0].fondo : ''">
+            <strong>{{eventosDelMes && eventosDelMes[34] && eventosDelMes[34].eventos[0] ?
+              eventosDelMes[34].eventos[0].titulo : ''}}</strong>
+          </div>
+        </div>
+        <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+             *ngIf="eventosDelMes && eventosDelMes[34] && eventosDelMes[34].eventos.length > 1">
+          <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+               [style.background]="(eventosDelMes && eventosDelMes[34] && eventosDelMes[34].eventos[1]) ? eventosDelMes[34].eventos[1].fondo : ''">
+            <strong>{{eventosDelMes && eventosDelMes[34] && eventosDelMes[34].eventos[1] ?
+              eventosDelMes[34].eventos[1].titulo : ''}}</strong>
+          </div>
+        </div>
+        <div [ngClass]="sexta_semana ? 'eventos_tam2 mas2' : 'eventos_tam1 mas'"><strong>{{eventosDelMes &&
+          eventosDelMes[34] &&
+          eventosDelMes[34].eventos.length > 2 ?
+          (eventosDelMes[34].eventos.length - 2) + ' más': ''}}</strong></div>
+      </div>
+    </paper-button>
+
+  </div>
+
+  <paper-drawer-divider></paper-drawer-divider>
+
+  <div class="container flex semana2" *ngIf="sexta_semana">
+
+    <paper-button class="flexchild " [ngClass]="sexta_semana ? 'semana2' : 'semana'" raised
+                  (click)=" clickbotones(37); diamax >= 37 ? listaEventos.open() : ''">
+      <div [ngClass]="sexta_semana ? 'num_dia2' : 'num_dia'"><strong [ngClass]="(calendarioActualizarDiasMes.getMonth() === irHoyMes && irHoyNumeroDiaMes === 37 - diasemana) ? 'hoy' : ''">{{37 - diasemana}}</strong></div>
+      <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+           *ngIf="eventosDelMes && eventosDelMes[35] && eventosDelMes[35].eventos.length > 0">
+        <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+             [style.background]="(eventosDelMes && eventosDelMes[35] && eventosDelMes[35].eventos[0]) ? eventosDelMes[35].eventos[0].fondo : ''">
+          <strong>{{eventosDelMes && eventosDelMes[35] && eventosDelMes[35].eventos[0] ?
+            eventosDelMes[35].eventos[0].titulo : ''}}</strong>
+        </div>
+      </div>
+      <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+           *ngIf="eventosDelMes && eventosDelMes[35] && eventosDelMes[35].eventos.length > 1">
+        <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+             [style.background]="(eventosDelMes && eventosDelMes[35] && eventosDelMes[35].eventos[1]) ? eventosDelMes[35].eventos[1].fondo : ''">
+          <strong>{{eventosDelMes && eventosDelMes[35] && eventosDelMes[35].eventos[1] ?
+            eventosDelMes[35].eventos[1].titulo : ''}}</strong>
+        </div>
+      </div>
+      <div [ngClass]="sexta_semana ? 'eventos_tam2 mas2' : 'eventos_tam1 mas'"><strong>{{eventosDelMes &&
+        eventosDelMes[35] &&
+        eventosDelMes[35].eventos.length > 2 ?
+        (eventosDelMes[35].eventos.length - 2) + ' más': ''}}</strong></div>
+    </paper-button>
+
+    <paper-button class="flexchild " [ngClass]="sexta_semana ? 'semana2' : 'semana'" raised
+                  (click)=" clickbotones(38); diamax >= 38 ? listaEventos.open() : ''">
+      <div *ngIf="diamax >= 38">
+        <div [ngClass]="sexta_semana ? 'num_dia2' : 'num_dia'"><strong [ngClass]="(calendarioActualizarDiasMes.getMonth() === irHoyMes && irHoyNumeroDiaMes === 38 - diasemana) ? 'hoy' : ''">{{38 - diasemana}}</strong></div>
+        <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+             *ngIf="eventosDelMes && eventosDelMes[36] && eventosDelMes[36].eventos.length > 0">
+          <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+               [style.background]="(eventosDelMes && eventosDelMes[36] && eventosDelMes[36].eventos[0]) ? eventosDelMes[36].eventos[0].fondo : ''">
+            <strong>{{eventosDelMes && eventosDelMes[36] && eventosDelMes[36].eventos[0] ?
+              eventosDelMes[36].eventos[0].titulo : ''}}</strong>
+          </div>
+        </div>
+        <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+             *ngIf="eventosDelMes && eventosDelMes[36] && eventosDelMes[36].eventos.length > 1">
+          <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+               [style.background]="(eventosDelMes && eventosDelMes[36] && eventosDelMes[36].eventos[1]) ? eventosDelMes[36].eventos[1].fondo : ''">
+            <strong>{{eventosDelMes && eventosDelMes[36] && eventosDelMes[36].eventos[1] ?
+              eventosDelMes[36].eventos[1].titulo : ''}}</strong>
+          </div>
+        </div>
+        <div [ngClass]="sexta_semana ? 'eventos_tam2 mas2' : 'eventos_tam1 mas'"><strong>{{eventosDelMes &&
+          eventosDelMes[36] &&
+          eventosDelMes[36].eventos.length > 2 ?
+          (eventosDelMes[36].eventos.length - 2) + ' más': ''}}</strong></div>
+      </div>
+    </paper-button>
+
+    <paper-button class="flexchild " [ngClass]="sexta_semana ? 'semana2' : 'semana'" raised
+                  (click)=" clickbotones(39); diamax >= 39 ? listaEventos.open() : ''">
+      <div *ngIf="diamax >= 39">
+        <div [ngClass]="sexta_semana ? 'num_dia2' : 'num_dia'"><strong [ngClass]="(calendarioActualizarDiasMes.getMonth() === irHoyMes && irHoyNumeroDiaMes === 39 - diasemana) ? 'hoy' : ''">{{39 - diasemana}}</strong></div>
+        <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+             *ngIf="eventosDelMes && eventosDelMes[37] && eventosDelMes[37].eventos.length > 0">
+          <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+               [style.background]="(eventosDelMes && eventosDelMes[37] && eventosDelMes[37].eventos[0]) ? eventosDelMes[37].eventos[0].fondo : ''">
+            <strong>{{eventosDelMes && eventosDelMes[37] && eventosDelMes[37].eventos[0] ?
+              eventosDelMes[37].eventos[0].titulo : ''}}</strong>
+          </div>
+        </div>
+        <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+             *ngIf="eventosDelMes && eventosDelMes[37] && eventosDelMes[37].eventos.length > 1">
+          <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+               [style.background]="(eventosDelMes && eventosDelMes[37] && eventosDelMes[37].eventos[1]) ? eventosDelMes[37].eventos[1].fondo : ''">
+            <strong>{{eventosDelMes && eventosDelMes[37] && eventosDelMes[37].eventos[1] ?
+              eventosDelMes[37].eventos[1].titulo : ''}}</strong>
+          </div>
+        </div>
+        <div [ngClass]="sexta_semana ? 'eventos_tam2 mas2' : 'eventos_tam1 mas'"><strong>{{eventosDelMes &&
+          eventosDelMes[37] &&
+          eventosDelMes[37].eventos.length > 2 ?
+          (eventosDelMes[37].eventos.length - 2) + ' más': ''}}</strong></div>
+      </div>
+    </paper-button>
+
+    <paper-button class="flexchild " [ngClass]="sexta_semana ? 'semana2' : 'semana'" raised
+                  (click)=" clickbotones(40); diamax >= 40 ? listaEventos.open() : ''">
+      <div *ngIf="diamax >= 40">
+        <div [ngClass]="sexta_semana ? 'num_dia2' : 'num_dia'"><strong [ngClass]="(calendarioActualizarDiasMes.getMonth() === irHoyMes && irHoyNumeroDiaMes === 40 - diasemana) ? 'hoy' : ''">{{40 - diasemana}}</strong></div>
+        <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+             *ngIf="eventosDelMes && eventosDelMes[38] && eventosDelMes[38].eventos.length > 0">
+          <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+               [style.background]="(eventosDelMes && eventosDelMes[38] && eventosDelMes[38].eventos[0]) ? eventosDelMes[38].eventos[0].fondo : ''">
+            <strong>{{eventosDelMes && eventosDelMes[38] && eventosDelMes[38].eventos[0] ?
+              eventosDelMes[38].eventos[0].titulo : ''}}</strong>
+          </div>
+        </div>
+        <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+             *ngIf="eventosDelMes && eventosDelMes[38] && eventosDelMes[38].eventos.length > 1">
+          <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+               [style.background]="(eventosDelMes && eventosDelMes[38] && eventosDelMes[38].eventos[1]) ? eventosDelMes[38].eventos[1].fondo : ''">
+            <strong>{{eventosDelMes && eventosDelMes[38] && eventosDelMes[38].eventos[1] ?
+              eventosDelMes[38].eventos[1].titulo : ''}}</strong>
+          </div>
+        </div>
+        <div [ngClass]="sexta_semana ? 'eventos_tam2 mas2' : 'eventos_tam1 mas'"><strong>{{eventosDelMes &&
+          eventosDelMes[38] &&
+          eventosDelMes[38].eventos.length > 2 ?
+          (eventosDelMes[38].eventos.length - 2) + ' más': ''}}</strong></div>
+      </div>
+    </paper-button>
+
+    <paper-button class="flexchild " [ngClass]="sexta_semana ? 'semana2' : 'semana'" raised
+                  (click)=" clickbotones(41); diamax >= 41 ? listaEventos.open() : ''">
+      <div *ngIf="diamax >= 41">
+        <div [ngClass]="sexta_semana ? 'num_dia2' : 'num_dia'"><strong [ngClass]="(calendarioActualizarDiasMes.getMonth() === irHoyMes && irHoyNumeroDiaMes === 41 - diasemana) ? 'hoy' : ''">{{41 - diasemana}}</strong></div>
+        <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+             *ngIf="eventosDelMes && eventosDelMes[39] && eventosDelMes[39].eventos.length > 0">
+          <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+               [style.background]="(eventosDelMes && eventosDelMes[39] && eventosDelMes[39].eventos[0]) ? eventosDelMes[39].eventos[0].fondo : ''">
+            <strong>{{eventosDelMes && eventosDelMes[39] && eventosDelMes[39].eventos[0] ?
+              eventosDelMes[39].eventos[0].titulo : ''}}</strong>
+          </div>
+        </div>
+        <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+             *ngIf="eventosDelMes && eventosDelMes[39] && eventosDelMes[39].eventos.length > 1">
+          <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+               [style.background]="(eventosDelMes && eventosDelMes[39] && eventosDelMes[39].eventos[1]) ? eventosDelMes[39].eventos[1].fondo : ''">
+            <strong>{{eventosDelMes && eventosDelMes[39] && eventosDelMes[39].eventos[1] ?
+              eventosDelMes[39].eventos[1].titulo : ''}}</strong>
+          </div>
+        </div>
+        <div [ngClass]="sexta_semana ? 'eventos_tam2 mas2' : 'eventos_tam1 mas'"><strong>{{eventosDelMes &&
+          eventosDelMes[39] &&
+          eventosDelMes[39].eventos.length > 2 ?
+          (eventosDelMes[39].eventos.length - 2) + ' más': ''}}</strong></div>
+      </div>
+    </paper-button>
+
+    <paper-button class="flexchild " [ngClass]="sexta_semana ? 'semana2' : 'semana'" raised
+                  (click)=" clickbotones(42); diamax >= 42 ? listaEventos.open() : ''">
+      <div *ngIf="diamax >= 42">
+        <div [ngClass]="sexta_semana ? 'num_dia2' : 'num_dia'"><strong [ngClass]="(calendarioActualizarDiasMes.getMonth() === irHoyMes && irHoyNumeroDiaMes === 42 - diasemana) ? 'hoy' : ''">{{42 - diasemana}}</strong></div>
+        <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+             *ngIf="eventosDelMes && eventosDelMes[40] && eventosDelMes[40].eventos.length > 0">
+          <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+               [style.background]="(eventosDelMes && eventosDelMes[40] && eventosDelMes[40].eventos[0]) ? eventosDelMes[40].eventos[0].fondo : ''">
+            <strong>{{eventosDelMes && eventosDelMes[40] && eventosDelMes[40].eventos[0] ?
+              eventosDelMes[40].eventos[0].titulo : ''}}</strong>
+          </div>
+        </div>
+        <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+             *ngIf="eventosDelMes && eventosDelMes[40] && eventosDelMes[40].eventos.length > 1">
+          <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+               [style.background]="(eventosDelMes && eventosDelMes[40] && eventosDelMes[40].eventos[1]) ? eventosDelMes[40].eventos[1].fondo : ''">
+            <strong>{{eventosDelMes && eventosDelMes[40] && eventosDelMes[40].eventos[1] ?
+              eventosDelMes[40].eventos[1].titulo : ''}}</strong>
+          </div>
+        </div>
+        <div [ngClass]="sexta_semana ? 'eventos_tam2 mas2' : 'eventos_tam1 mas'"><strong>{{eventosDelMes &&
+          eventosDelMes[40] &&
+          eventosDelMes[40].eventos.length > 2 ?
+          (eventosDelMes[40].eventos.length - 2) + ' más': ''}}</strong></div>
+      </div>
+    </paper-button>
+
+    <paper-button class="flexchild " [ngClass]="sexta_semana ? 'semana2' : 'semana'" raised
+                  (click)=" clickbotones(43); diamax >= 43 ? listaEventos.open() : ''">
+      <div *ngIf="diamax >= 43">
+        <div [ngClass]="sexta_semana ? 'num_dia2' : 'num_dia'"><strong [ngClass]="(calendarioActualizarDiasMes.getMonth() === irHoyMes && irHoyNumeroDiaMes === 43 - diasemana) ? 'hoy' : ''">{{43 - diasemana}}</strong></div>
+        <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+             *ngIf="eventosDelMes && eventosDelMes[41] && eventosDelMes[41].eventos.length > 0">
+          <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+               [style.background]="(eventosDelMes && eventosDelMes[41] && eventosDelMes[41].eventos[0]) ? eventosDelMes[41].eventos[0].fondo : ''">
+            <strong>{{eventosDelMes && eventosDelMes[41] && eventosDelMes[41].eventos[0] ?
+              eventosDelMes[41].eventos[0].titulo : ''}}</strong>
+          </div>
+        </div>
+        <div [ngClass]="sexta_semana ? 'eventos_tam2' : 'eventos_tam1'"
+             *ngIf="eventosDelMes && eventosDelMes[41] && eventosDelMes[41].eventos.length > 1">
+          <div [ngClass]="sexta_semana ? 'eventos2_tam2' : 'eventos2_tam1'"
+               [style.background]="(eventosDelMes && eventosDelMes[41] && eventosDelMes[41].eventos[1]) ? eventosDelMes[41].eventos[1].fondo : ''">
+            <strong>{{eventosDelMes && eventosDelMes[41] && eventosDelMes[41].eventos[1] ?
+              eventosDelMes[41].eventos[1].titulo : ''}}</strong>
+          </div>
+        </div>
+        <div [ngClass]="sexta_semana ? 'eventos_tam2 mas2' : 'eventos_tam1 mas'"><strong>{{eventosDelMes &&
+          eventosDelMes[41] &&
+          eventosDelMes[41].eventos.length > 2 ?
+          (eventosDelMes[41].eventos.length - 2) + ' más': ''}}</strong></div>
+      </div>
+    </paper-button>
+
+  </div>
+</div>
+
+<footer class="centrado" id="footer">{{st_footer}}</footer>
+
+<app-datepicker-dialog #dialogIrFecha with-backdrop id="datePicker"
+                       (iron-overlay-closed)="cambiarFecha(dialogIrFecha.date, dialogIrFecha.closingReason)"
+                       (iron-overlay-opened)="dialogAbierto()"
+                       [inputDate]="st_fechahoy"
+                       [minDate]="minDate"
+                       [maxDate]="maxDate"
+                       dismiss-label="cancelar"
+                       entry-animation="datepicker-slide-from-bottom-animation"
+                       exit-animation="datepicker-slide-from-top-animation"></app-datepicker-dialog>
+
+<paper-dialog id="listaEventos" #listaEventos with-backdrop
+              entry-animation="datepicker-slide-from-bottom-animation"
+              exit-animation="datepicker-slide-from-top-animation">
+  <div id="header_dia">{{nombreDia}}</div>
+  <div id="nu_dia">{{numerDia}}</div>
+  <paper-dialog-scrollable id="scroll_lista">
+    <ul class="conte_listaeventos" *ngFor="let evento of eventosDia">
+      <paper-button class="listaeventos" [style.background]="evento.fondo"
+                    (click)="clickEvento(evento); dialogDetalle.open()">
+        <div style="display: flex">
+          <div class="info1" style="display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+            <strong>{{evento.titulo}}</strong></div>
+        </div>
+        <div class="info2">{{horasATetxto(evento.horaInicial) + " - " + horasATetxto(evento.horaFinal)}}</div>
+        <div class="info2">{{getAuditorio(evento.auditorio)}}</div>
+      </paper-button>
+    </ul>
+  </paper-dialog-scrollable>
+</paper-dialog>
+
+<paper-dialog id="dialogDetalle" #dialogDetalle with-backdrop
+              entry-animation="datepicker-slide-from-bottom-animation"
+              exit-animation="datepicker-slide-from-top-animation">
+  <div [style.background]="eventosDetalle?.fondo" id="conte_titulo">
+    <paper-icon-button icon="clear" (click)="dialogDetalle.close()"></paper-icon-button>
+    <div class="ct">
+      <div id="marca_agua">Registrado por Tere - 23/01/2017 a las 3:10 PM</div>
+      <div class="titulo">{{eventosDetalle?.titulo}}</div>
+    </div>
+  </div>
+  <div style="display: block; margin-top: 24px; margin-bottom:8px; margin-left: 8px; margin-right: 8px; padding: 0">
+    <div style="display: flex; height: 48px; margin-left: 14px">
+      <img src="/aplicacion/imagenes/ic_auditorio.png" style="width:20px;height:20px; margin-top: 4px">
+      <div>
+        <div class="l1">
+          Auditorio:
+        </div>
+        <div class="l2">
+          {{getAuditorio(eventosDetalle?.auditorio)}}
+        </div>
+      </div>
+    </div>
+    <div style="display: flex; height: 48px; margin-left: 14px">
+      <img src="/aplicacion/imagenes/ic_actividad.png" style="width:20px;height:20px;">
+      <div>
+        <div class="l1">
+          Tipo de evento:
+        </div>
+        <div class="l2">
+          {{eventosDetalle?.tipoEvento}}
+        </div>
+      </div>
+    </div>
+    <div style="display: flex; height: 48px; margin-left: 14px">
+      <img src="/aplicacion/imagenes/ic_watch2.png" style="width:20px;height:20px; margin-top: 4px">
+      <div>
+        <div class="l1">
+          Horario del evento:
+        </div>
+        <div class="l2">
+          {{horasATetxto(eventosDetalle?.horaInicial) + " - " + horasATetxto(eventosDetalle?.horaFinal)}}
+        </div>
+      </div>
+    </div>
+    <div style="display: flex; height: 48px; margin-left: 14px">
+      <img src="/aplicacion/imagenes/ic_fecha.png" style="width:20px;height:20px; margin-top: 4px">
+      <div>
+        <div class="l1">
+          Fecha del evento:
+        </div>
+        <div class="l2">
+          {{(fecha(eventosDetalle?.fecha) | date:'EEEE') | capitalize}}, {{(fecha(eventosDetalle?.fecha) |
+          date:'longDate')}}
+        </div>
+      </div>
+    </div>
+    <div style="height: 1px; background: rgba(55,71,79,0.51); width: 100%; margin-right: 8px; margin-bottom: 16px"></div>
+    <div style="display: flex; height: 48px; margin-left: 14px">
+      <img src="/aplicacion/imagenes/ic_edif.png" style="width:20px;height:20px; margin-top: 6px">
+      <div>
+        <div class="l1">
+          Dependencia:
+        </div>
+        <div class="l2">
+          {{eventosDetalle?.dependencia}}
+        </div>
+      </div>
+    </div>
+    <div style="display: flex; height: 48px; margin-left: 14px">
+      <img src="/aplicacion/imagenes/ic_person_black.png" style="width:20px;height:20px; margin-top: 6px">
+      <div>
+        <div class="l1">
+          Nombre del solicitante:
+        </div>
+        <div class="l2">
+          {{eventosDetalle?.nombreSolicitante}}
+        </div>
+      </div>
+    </div>
+    <div style="display: flex; height: 48px; margin-left: 14px">
+      <img src="/aplicacion/imagenes/ic_id.png" style="width:20px;height:20px; margin-top: 6px">
+      <div>
+        <div class="l1">
+          Extensión del solicitante:
+        </div>
+        <div class="l2">
+          {{eventosDetalle?.numTelSolicitante}}
+        </div>
+      </div>
+    </div>
+    <div style="display: flex; height: 48px; margin-left: 14px">
+      <img src="/aplicacion/imagenes/ic_resp.png" style="width:20px;height:20px; margin-top: 4px">
+      <div>
+        <div class="l1">
+          Nombre del responsable:
+        </div>
+        <div class="l2">
+          {{eventosDetalle?.nombreResponsable}}
+        </div>
+      </div>
+    </div>
+    <div style="display: flex; height: 48px; margin-left: 14px">
+      <img src="/aplicacion/imagenes/ic_call_black.png" style="width:20px;height:20px; margin-top: 4px">
+      <div>
+        <div class="l1">
+          No. cel. del responsable:
+        </div>
+        <div class="l2">
+          {{eventosDetalle?.nombreResponsable}}
+        </div>
+      </div>
+    </div>
+    <div style="height: 1px; background: rgba(55,71,79,0.51); width: 100%; margin-right: 8px; margin-bottom: 16px"></div>
+    <div style="display: flex; height: 48px; margin-left: 14px">
+      <img src="/aplicacion/imagenes/ic_nota.png" style="width:20px;height:20px; margin-top: 4px">
+      <div>
+        <div class="l1">
+          Nota:
+        </div>
+        <div class="l2">
+          {{eventosDetalle?.notas === '' ? 'Sin notas' : eventosDetalle?.notas}}
+        </div>
+      </div>
+    </div>
+    <div style="display: flex; height: 48px; margin-left: 14px">
+      <img src="/aplicacion/imagenes/ic_id2.jpg" style="width:20px;height:20px; margin-top: 4px">
+      <div>
+        <div class="l1">
+          ID del evento:
+        </div>
+        <div class="l2">
+          {{eventosDetalle?.id}}
+        </div>
+      </div>
+    </div>
+  </div>
+</paper-dialog>
+
+<paper-dialog id="dialogBuscar" #dialogBuscar with-backdrop
+              entry-animation="datepicker-slide-from-bottom-animation"
+              exit-animation="datepicker-slide-from-top-animation">
+  <app-toolbar id="toolbar_buscar">
+    <paper-icon-button icon="clear" onclick="dialogBuscar.close()"></paper-icon-button>
+    <div main-title>Busqueda de eventos</div>
+    <paper-icon-button icon="menu" style="visibility: hidden"></paper-icon-button>
+  </app-toolbar>
+  <div class="autocomplete-wrapper">
+    <paper-input id="myInput" #search
+                 label="Busca un evento por nombre, nombre del organizador, auditorio, tipo de evento, ID, fecha de registro, etc."
+                 (keydown.enter)="buscar(search.value); dialogBuscar.notifyResize()"></paper-input>
+    <paper-autocomplete-suggestions for="myInput" [source]="sugerencias"></paper-autocomplete-suggestions>
+  </div>
+  <paper-dialog-scrollable>
+    <ul class="conte_listaeventos" *ngFor="let ev of eventosBuscados">
+      <paper-button class="listaeventos" [style.background]="ev.fondo"
+                    (click)="clickEvento(ev); dialogDetalle.open()">
+        <div style="display: flex">
+          <div class="info2" style="display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+            <strong>{{ev.titulo}}</strong></div>
+        </div>
+        <div class="info2">{{ev.nombreOrganizador}}</div>
+        <div class="info2">{{horasATetxto(ev.horaInicial) + " - " + horasATetxto(ev.horaFinal)}}</div>
+        <div class="info2">{{fecha(ev.fecha) | date:'fullDate'}}</div>
+        <div class="info2">{{getAuditorio(ev.auditorio)}}</div>
+        <div class="info2">{{ev.id}}</div>
+      </paper-button>
+    </ul>
+  </paper-dialog-scrollable>
+
+</paper-dialog>
+
+<paper-dialog id="dialogGenerarReporte" modal #dialogGenerarReporte with-backdrop
+              entry-animation="datepicker-slide-from-bottom-animation"
+              exit-animation="datepicker-slide-from-top-animation">
+  <div id="conte_reporte">
+    <div class="ct centrado">
+      <div class="titulo"><strong>Generar reporte de eventos</strong></div>
+    </div>
+  </div>
+
+  <div id="conte_filtro">
+    <div class="instrucciones">Selecciona los auditorios de los cuales quieras generar el reporte:</div>
+    <paper-checkbox class="c1" #cc1 noink="true" checked (change)="checkboxchangeReporte(1, cc1.checked)">Auditorio
+      Salvador
+      Allende
+    </paper-checkbox>
+    <paper-checkbox class="c2" #cc2 noink="true" checked (change)="checkboxchangeReporte(2, cc2.checked)">Auditorio
+      Silvano
+      Barba
+    </paper-checkbox>
+    <paper-checkbox class="c3" #cc3 noink="true" checked (change)="checkboxchangeReporte(3, cc3.checked)">Auditorio
+      Carlos
+      Ramírez
+    </paper-checkbox>
+    <paper-checkbox class="c4" #cc4 noink="true" checked (change)="checkboxchangeReporte(4, cc4.checked)">Auditorio
+      Adalberto
+      Navarro
+    </paper-checkbox>
+    <paper-checkbox class="c5" #cc5 noink="true" checked (change)="checkboxchangeReporte(5, cc5.checked)">Sala de
+      Juicios Orales
+      Mariano Otero
+    </paper-checkbox>
+  </div>
+  <paper-drawer-divider></paper-drawer-divider>
+
+  <div id="conte_fechas">
+    <div class="instrucciones" style="margin-top: 12px !important;">Selecciona la fecha inicial y final del reporte:
+    </div>
+
+    <div (click)="fechaInicialReporte(); dialogIrFecha.open()"
+         style="display: flex; padding-left: 14px; padding-right: 14px; padding-top: 10px; padding-bottom: 10px; margin-top: 4px; box-sizing: border-box">
+      <img src="/aplicacion/imagenes/ic_fecha.png" style="width:20px;height:20px;">
+      <div class="repofecha1" *ngIf="st_fecha_inicial_reporte === 'Fecha inicial del reporte:'">
+        {{st_fecha_inicial_reporte}}
+      </div>
+      <div class="repofecha2" *ngIf="st_fecha_inicial_reporte !== 'Fecha inicial del reporte:'">
+        {{st_fecha_inicial_reporte | date:'fullDate'}}
+      </div>
+    </div>
+    <div (click)="fechafinalReporte(); dialogIrFecha.open()"
+         style="display: flex; padding-left: 14px; padding-right: 14px; padding-top: 10px; padding-bottom: 10px; box-sizing: border-box">
+      <img src="/aplicacion/imagenes/ic_fecha.png" style="width:20px;height:20px;">
+      <div class="repofecha1" *ngIf="st_fecha_final_reporte === 'Fecha final del reporte:'">{{st_fecha_final_reporte}}
+      </div>
+      <div class="repofecha2" *ngIf="st_fecha_final_reporte !== 'Fecha final del reporte:'">{{st_fecha_final_reporte |
+        date:'fullDate'}}
+      </div>
+    </div>
+  </div>
+
+  <paper-drawer-divider></paper-drawer-divider>
+
+  <div class="buttons cb">
+    <paper-button class="gen2" dialog-dismiss>Cancelar</paper-button>
+    <paper-button class="gen" (click)="bottonReporte() ? mostarSnack() : generarReporte(); bottonReporte() ? '' : dialogImprimirReporte.open();">Generar reporte</paper-button>
+  </div>
+
+</paper-dialog>
+
+<paper-dialog id="dialogImprimirReporte" #dialogImprimirReporte with-backdrop
+              entry-animation="datepicker-slide-from-bottom-animation"
+              exit-animation="datepicker-slide-from-top-animation">
+
+  <paper-button class="centrado impi" (click)="impri()">Imprimir</paper-button>
+
+  <paper-dialog-scrollable id="re">
+
+    <div *ngFor="let n of eventosReporteCant" class="screpo">
+      <div class="caja marcas_agua">
+        <div>{{audisReporte}}</div>
+        <div>Número de eventos: {{eventosReporteOrg?.length}}</div>
+        <div>{{marcaReporte}}</div>
+        <div>{{marcaReporte2}}</div>
+        <div>Página {{(n / 20) + 1}} de {{eventosReporteCant.length}}</div>
+      </div>
+
+      <div class="conte_repo">
+        <div class="bloque1">
+          <paper-button *ngFor="let ev of eventosReporte.slice(n, n + 10)" class="listaeventos2"
+               [style.background]="(ev.fecha !== ev.horaInicial) ? ev.fondo : '#ffffff'">
+            <div class="caja fecha" *ngIf="ev.fecha === ev.horaInicial">
+              <div class="fefe">
+                <div class="fecha1"><strong>{{fecha(ev.fecha) | date:'MMMM'}}</strong></div>
+                <div class="fecha2">{{fecha(ev.fecha) | date:'dd '}}</div>
+              </div>
+            </div>
+
+            <div *ngIf="ev.fecha !== ev.horaInicial"
+                          (click)="clickEvento(ev); dialogDetalle.open()">
+              <div class="ne">
+                <div style="display: flex">
+                  <div class="info3"
+                       style="display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                    <strong>{{ev.titulo}}</strong></div>
+                </div>
+                <div style="display: flex">
+                  <div class="info3"
+                       style="display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                    <strong>{{ev.nombreOrganizador}}</strong></div>
+                </div>
+                <div class="info3">{{horasATetxto(ev.horaInicial) + " - " + horasATetxto(ev.horaFinal)}}</div>
+                <div class="info3">{{getAuditorio(ev.auditorio)}}</div>
+                <div class="info3">ID: {{ev.id}}</div>
+              </div>
+            </div>
+          </paper-button>
+        </div>
+
+        <div class="bloque2">
+          <paper-button *ngFor="let ev of eventosReporte.slice(n + 10, n + 20)" class="listaeventos2"
+                        [style.background]="(ev.fecha !== ev.horaInicial) ? ev.fondo : '#ffffff'">
+            <div class="caja fecha" *ngIf="ev.fecha === ev.horaInicial">
+              <div class="fefe">
+                <div class="fecha1"><strong>{{fecha(ev.fecha) | date:'MMMM'}}</strong></div>
+                <div class="fecha2">{{fecha(ev.fecha) | date:'dd '}}</div>
+              </div>
+            </div>
+
+            <div *ngIf="ev.fecha !== ev.horaInicial"
+                 (click)="clickEvento(ev); dialogDetalle.open()">
+              <div class="ne">
+                <div style="display: flex">
+                  <div class="info3"
+                       style="display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                    <strong>{{ev.titulo}}</strong></div>
+                </div>
+                <div style="display: flex">
+                  <div class="info3"
+                       style="display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                    <strong>{{ev.nombreOrganizador}}</strong></div>
+                </div>
+                <div class="info3">{{horasATetxto(ev.horaInicial) + " - " + horasATetxto(ev.horaFinal)}}</div>
+                <div class="info3">{{getAuditorio(ev.auditorio)}}</div>
+                <div class="info3">ID: {{ev.id}}</div>
+              </div>
+            </div>
+          </paper-button>
+        </div>
+      </div>
+    </div>
+  </paper-dialog-scrollable>
+</paper-dialog>
+
+<app-drawer id="drawer" swipe-open>
+  <paper-drawer-title photo="/aplicacion/imagenes/logo.png" name="Sede Belenes"
+                      email="Centro Universitario de Ciencias Sociales y Humanidades"></paper-drawer-title>
+  <paper-checkbox class="c1" #c1 checked noink="true" (change)="checkboxchange(1, c1.checked)">Edificio A
+  </paper-checkbox>
+  <paper-checkbox class="c2" #c2 checked noink="true" (change)="checkboxchange(2, c2.checked)">Edificio B
+  </paper-checkbox>
+  <paper-checkbox class="c3" #c3 checked noink="true" (change)="checkboxchange(3, c3.checked)">Edificio C
+  </paper-checkbox>
+  <paper-checkbox class="c4" #c4 checked noink="true" (change)="checkboxchange(4, c4.checked)">Edificio D
+  </paper-checkbox>
+  <paper-checkbox class="c5" #c5 checked noink="true" (change)="checkboxchange(5, c5.checked)">Edificio F
+  </paper-checkbox>
+
+  <paper-drawer-divider></paper-drawer-divider>
+
+  <paper-checkbox class="c6" #c6 checked noink="true" (change)="checkboxchange(6, c6.checked)">Ver clases
+  </paper-checkbox>
+  <paper-checkbox class="c6" #c7 checked noink="true" (change)="checkboxchange(7, c7.checked)">Ver eventos
+  </paper-checkbox>
+
+
+</app-drawer>

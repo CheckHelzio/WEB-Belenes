@@ -1,0 +1,548 @@
+
+app-toolbar {
+  background-color: #37474F;
+  font-family: 'Roboto', Helvetica, sans-serif;
+  color: white;
+  font-weight: bold;
+  font-size: 12pt;
+  height: 6vh;
+  text-align: center;
+}
+
+#conte_nombre_dias {
+  font-weight: bold;
+  height: 3.5vh;
+  font-size: 8pt;
+  background-color: white;
+}
+
+paper-drawer-divider {
+  margin: 0;
+  padding: 0;
+}
+
+paper-checkbox {
+  font-family: 'Roboto', sans-serif;
+}
+
+paper-drawer-title {
+  background-image: url(http://www.udg.mx/sites/default/files/140220_cucsh.jpg);
+  background-size: 264px;
+}
+
+#conte_sub_header {
+  width: 100%;
+  height: 3.5vh;
+  background-color: #FF5252;
+  font-size: 9pt;
+  color: white;
+  font-weight: bold;
+}
+
+#footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 2.5vh;
+  background-color: #37474F;
+  font-size: 7pt;
+  color: white;
+}
+
+#conte_botones {
+  height: 84vh;
+  background-color: white;
+}
+
+.semana {
+  height: 16.8vh;
+}
+
+.semana2 {
+  height: 14vh;
+}
+
+.centrado {
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+
+paper-button {
+  margin: 0;
+  padding: 0;
+  border-radius: 0;
+  display: block;
+  position: relative;
+}
+
+.num_dia {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  margin-left: 8px;
+  height: 5.376vh;
+  color: #757575;
+  font-size: 9pt;
+}
+
+.num_dia2 {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  margin-left: 8px;
+  height: 4.48vh;
+  width: 4.48vh;
+  color: #757575;
+  font-size: 9pt;
+}
+
+.eventos_tam1 {
+  box-sizing: border-box;
+  margin-left: 8px;
+  margin-right: 8px;
+  color: white;
+  height: 3.808vh;
+  width: auto;
+  font-size: 7pt;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: left;
+  display: flex;
+  align-items: center;
+}
+
+.eventos_tam2 {
+  box-sizing: border-box;
+  margin-left: 8px;
+  margin-right: 8px;
+  color: white;
+  height: 3.173vh;
+  width: auto;
+  font-size: 7pt;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: left;
+  display: flex;
+  align-items: center;
+}
+
+.eventos2_tam1 {
+  width: 100%;
+  padding-left: 8px;
+  padding-right: 8px;
+  border-radius: 2px;
+  height: 3.4vh;
+  line-height: 3.4vh;
+  display: block;
+  align-items: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.eventos2_tam2 {
+  width: 100%;
+  padding-left: 8px;
+  padding-right: 8px;
+  border-radius: 2px;
+  height: 2.8vh;
+  line-height: 2.8vh;
+  display: block;
+  align-items: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mas {
+  margin-left: 16px;
+  font-size: 7pt;
+  height: 2.8vh;
+  display: flex;
+  align-items: center;
+  color: #757575;
+}
+
+.mas2 {
+  margin-left: 16px;
+  font-size: 6pt;
+  height: 2.3vh;
+  display: flex;
+  align-items: center;
+  color: #757575;
+}
+
+.num_dia2 strong {
+  margin-top: .5vh;
+  height: 2.5vh;
+  width: 2.5vh;
+  text-align: center;
+  line-height: 2.5vh;
+  border-radius: 1.5vh;
+  background-color: white;
+}
+
+.num_dia2 .hoy {
+  margin-top: .5vh;
+  height: 2.5vh;
+  width: 2.5vh;
+  text-align: center;
+  line-height: 2.5vh;
+  border-radius: 1.5vh;
+  background-color: #FF5252;
+  color: white;
+}
+
+.num_dia strong {
+  margin-top: 1.5vh;
+  height: 2.5vh;
+  width: 2.5vh;
+  text-align: center;
+  line-height: 2.5vh;
+  border-radius: 1.5vh;
+  background-color: white;
+}
+
+.num_dia .hoy {
+  margin-top: 1.5vh;
+  height: 2.5vh;
+  width: 2.5vh;
+  text-align: center;
+  line-height: 2.5vh;
+  border-radius: 1.5vh;
+  background-color: #FF5252;
+  color: white;
+}
+
+#listaEventos {
+  width: 50%;
+  box-sizing: border-box;
+  border-radius: 3px;
+  padding-top: 16px;
+  padding-bottom: 16px;
+}
+
+#header_dia {
+  padding-bottom: 2px;
+  font-weight: bold;
+  color: #757575;
+  margin: 0;
+  font-size: 9pt;
+  padding-left: 32px;
+}
+
+#nu_dia {
+  color: #757575;
+  font-weight: bold;
+  margin: 0 0 16px;
+  font-size: 35pt;
+  padding-left: 28px;
+  line-height: 24pt;
+}
+
+.listaeventos {
+  width: 100%;
+  padding: 7px 16px;
+  border-radius: 3px;
+  color: white;
+}
+
+.listaeventos2 {
+  width: 100%;
+  margin-bottom: 5px;
+  height: 67px;
+  box-sizing: border-box;
+  padding: 7px 16px;
+  border-radius: 3px;
+  color: white;
+}
+
+.conte_listaeventos {
+  display: block;
+  padding: 0;
+  border-radius: 4px;
+  color: white;
+}
+
+.info1 {
+  font-weight: bold;
+  font-size: 8pt;
+  line-height: 11pt;
+}
+
+.info2 {
+  font-size: 8pt;
+  line-height: 11pt;
+}
+
+.info3 {
+  font-weight: normal;
+  font-size: 7pt;
+  line-height: 8.6pt;
+}
+
+ul {
+  margin-bottom: 9px !important;
+  margin-top: 0 !important;
+}
+
+#dialogDetalle {
+  width: 40%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  border-radius: 3px;
+}
+
+paper-dialog #conte_titulo {
+  color: white;
+  margin: 0;
+  padding-left: 16px !important;
+  padding-right: 8px !important;
+  padding-top: 16px !important;
+  padding-bottom: 8px !important;
+}
+
+paper-dialog .titulo {
+  padding-left: 56px;
+  padding-bottom: 16px;
+  padding-top: 4px;
+  padding-right: 40px;
+  font-size: 12pt;
+  line-height: 15pt;
+}
+
+#marca_agua {
+  margin-left: 56px;
+  margin-right: 40px;
+  font-size: 6pt;
+  line-height: 7pt;
+  text-align: start;
+  font-weight: bold;
+}
+
+.ct {
+  margin-top: 8px;
+}
+
+.l1 {
+  display: block;
+  align-items: center;
+  margin-left: 30px;
+  font-size: 7pt;
+  line-height: 10pt;
+}
+
+.l2 {
+  display: block;
+  align-items: center;
+  margin-left: 30px;
+  font-size: 12pt;
+  line-height: 13pt;
+}
+
+#dialogBuscar {
+  width: 50%;
+  box-sizing: border-box;
+  border-radius: 3px;
+  padding-bottom: 16px;
+  padding-left: 0;
+  padding-right: 0;
+  padding-top: 0;
+}
+
+#dialogBuscar #toolbar_buscar {
+  margin: 0 !important;
+}
+
+paper-dialog-scrollable {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+#scrollable {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.autocomplete-wrapper {
+  margin-top: 0 !important;
+}
+
+#conte_reporte {
+  background-color: #37474F;
+}
+
+.impi {
+  color: #37474F;
+  font-weight: bold;
+  padding: 5px;
+}
+
+.generarreporte {
+  margin-top: 6px;
+  font-weight: bold;
+  font-size: 9pt;
+  line-height: 10pt;
+  margin-left: 16px;
+}
+
+#dialogGenerarReporte {
+  width: 35%;
+  color: white;
+  margin: 0;
+  padding: 0;
+}
+
+#dialogGenerarReporte #conte_reporte {
+  color: white;
+  margin: 0 !important;
+  padding: 16px;
+}
+
+#dialogGenerarReporte .titulo {
+  font-size: 11pt;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#conte_filtro {
+  display: table;
+  margin-top: 12px;
+  padding-left: 10px !important;
+  padding-top: 4px !important;
+  padding-bottom: 8px !important;
+}
+
+paper-checkbox {
+  width: 100%;
+}
+
+.instrucciones {
+  text-align: center;
+  font-size: 10pt;
+  font-weight: bold;
+  color: #121212;
+  margin-bottom: 8px;
+}
+
+.repofecha1 {
+  margin-top: 6px;
+  font-weight: bold;
+  font-size: 9pt;
+  line-height: 9pt;
+  margin-left: 16px;
+  color: #37474F;
+
+}
+
+.repofecha2 {
+  margin-top: 6px;
+  font-weight: bold;
+  font-size: 9pt;
+  line-height: 9pt;
+  margin-left: 16px;
+  color: #121212;
+}
+
+#conte_fechas {
+  margin-left: 10px;
+  margin-top: 0;
+  margin-bottom: 8px;
+  margin-right: 0;
+  padding: 0;
+}
+
+#ppd {
+  text-transform: none;
+}
+
+.gen {
+  border-radius: 3px;
+  height: 32px;
+  margin-right: 8px;
+  padding-left: 8px;
+  padding-right: 8px;
+  line-height: 30pt;
+  font-size: 10pt;
+  font-weight: bold;
+  color: #37474F;
+}
+
+.gen2 {
+  border-radius: 3px;
+  height: 32px;
+  padding-left: 8px;
+  padding-right: 8px;
+  line-height: 30pt;
+  font-size: 10pt;
+  color: #37474F;
+}
+
+.cb {
+  margin-top: 6px !important;
+  margin-bottom: 6px !important;
+}
+
+#dialogImprimirReporte {
+  width: 80% !important;
+  padding-top: 16px !important;
+}
+
+.caja {
+  height: 9.09090909091vh;
+}
+
+.conte_repo {
+  height: 720px;
+  width: 100%;
+}
+
+.marcas_agua {
+  box-sizing: border-box;
+  padding-top: 8px;
+  color: #757575;
+  font-weight: bold;
+  height: 72px;
+  padding-left: 8px;
+  font-size: 8pt;
+  line-height: 9pt;
+}
+
+.screpo {
+  height: 792px;
+}
+
+.bloque1 {
+  width: 49%;
+  float: left;
+}
+
+.bloque2 {
+  width: 49%;
+  float: right;
+}
+
+.fecha {
+  color: #757575;
+}
+
+.fecha1 {
+  font-size: 10pt;
+  line-height: 13pt;
+  padding-left: 12px;
+  text-transform: none;
+}
+
+.fecha2 {
+  font-size: 32pt;
+  line-height: 37pt;
+  padding-left: 12px;
+}
+
+.fefe {
+  padding-top: 0;
+}
